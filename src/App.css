@@ -1,0 +1,109 @@
+#root {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.App {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+.CardsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  gap: 30px;
+}
+.studentCard {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 2px solid #4a90e2;
+  border-radius: 12px;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+.inputForm {
+  display: flex;
+  width: 100%;
+}
+.input {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 2px solid #4a90e2;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  cursor: pointer;
+}
+.btnInput {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.class {
+  display: flex;
+  margin-top: 10px;
+}
+
+.studentCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+.student {
+  width: 100%;
+  display: flex;
+  font-size: 20px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.student:last-child {
+  border-bottom: none;
+}
+.checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.checkbox input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.2);
+}
+.btn-here {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+.btn-here:hover {
+  background: #357abd;
+  transform: scale(1.05);
+}
+.btn-here:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+}
