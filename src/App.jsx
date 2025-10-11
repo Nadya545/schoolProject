@@ -53,7 +53,7 @@ function App() {
 
   const createNewStudents = (string) => {
     if (!string || string.trim() === "") {
-      alert("Введите данные студента!");
+      alert("Введите данные ученика!");
       return;
     }
     const newStr = string.split(" ");
@@ -61,8 +61,19 @@ function App() {
     const surname = newStr[1];
     const numClass = newStr[2];
 
-    const number = Number(numClass.match(/\d+/)[0]); // беру все цифры
-    let letter = numClass.match(/[А-Яа-яA-Za-z]/)[0]; // беру букву
+    const numberMatch = numClass.match(/\d+/); // беру все цифры
+    if (!numberMatch) {
+      return alert("Введите номер класса ученика!");
+    }
+
+    const number = Number(numberMatch[0]);
+    const letterMatch = numClass.match(/[А-Яа-яA-Za-z]/); // беру буквы
+    if (!letterMatch) {
+      return alert("Введите букву класса ученика!");
+    }
+
+    let letter = letterMatch[0];
+
     if (letter === "А" || letter === "а") {
       letter = "А";
     }
