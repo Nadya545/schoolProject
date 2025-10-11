@@ -51,6 +51,84 @@ function App() {
 
   const [selectedStudents, setSelectedStudents] = useState([]); //массив обьектов
 
+  const createNewStudents = (string) => {
+    if (!string || string.trim() === "") {
+      alert("Введите данные студента!");
+      return;
+    }
+    const newStr = string.split(" ");
+    const name = newStr[0];
+    const surname = newStr[1];
+    const numClass = newStr[2];
+
+    const number = Number(numClass.match(/\d+/)[0]); // беру все цифры
+    let letter = numClass.match(/[А-Яа-яA-Za-z]/)[0]; // беру букву
+    if (letter === "А" || letter === "а") {
+      letter = "А";
+    }
+    if (letter === "Б" || letter === "б") {
+      letter = "Б";
+    }
+    const getIdStudent = () => {
+      const idStudents = studentCards.flatMap((card) => {
+        return card.students;
+      });
+
+      const returnId = idStudents.map((el) => {
+        return el.id;
+      });
+
+      const idsArr = returnId;
+      if (idsArr.length !== 0) {
+        const maxId = Math.max(...idsArr);
+        const newId = maxId + 1;
+        return newId;
+      } else {
+        return 1;
+      }
+    };
+    const newId = getIdStudent();
+
+    const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+    const newStudent = {
+      id: newId,
+      name: capitalize(name),
+      surname: capitalize(surname),
+    };
+
+    const existingCardIndex = studentCards.findIndex((card) => {
+      console.log("Ищем:", number, letter); // 👈 что ищем
+      console.log("В карточке:", card.number, card.letter); // 👈 что есть
+      return card.number === number && card.letter === letter;
+    });
+    if (existingCardIndex !== -1) {
+      const newStudentsCard = studentCards.map((card, index) => {
+        if (existingCardIndex === index) {
+          return {
+            ...card,
+            students: [...card.students, newStudent],
+          };
+        }
+        return card;
+      });
+      setStudentCards(newStudentsCard);
+    } else {
+      const createNewCard = {
+        id: Date.now(),
+        letter: letter,
+        number: number,
+        students: [newStudent],
+      };
+      setStudentCards([...studentCards, createNewCard]);
+    }
+  };
+
+  const handleInput = () => {
+    console.log("inputEvent перед вызовом:", inputEvent);
+    createNewStudents(inputEvent);
+    setInputEvent("");
+  };
+
   const getMoveForId = (selectedStudents, targetCardIndex, cards) => {
     /*1)СОБИРАЮ ТОВАРЫ В itemsToMove для перемещения*/
 
@@ -177,6 +255,7 @@ function App() {
         studentCards={studentCards}
         inputEvent={inputEvent}
         setInputEvent={setInputEvent}
+        handleInput={handleInput}
       />
     </div>
   );

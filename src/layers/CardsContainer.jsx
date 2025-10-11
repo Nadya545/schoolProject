@@ -6,15 +6,26 @@ const CardsContainer = ({
   setInputEvent,
   selectedStudents,
   setSelectedStudents,
-
   handleMoveStudents,
+  handleInput,
 }) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleInput();
+  };
   return (
     <div className="CardsContainer">
-      <div className="inputForm">
-        <input className="input" type="text" />
-        <button className="btnInput">Ok</button>
-      </div>
+      <form className="inputForm">
+        <input
+          className="input"
+          type="text"
+          value={inputEvent}
+          onChange={(e) => setInputEvent(e.target.value)}
+        />
+        <button className="btnInput" onClick={handleSubmit} type="submit">
+          Ok
+        </button>
+      </form>
       {studentCards.map((cardData, index) => (
         <StudentCard
           handleMoveStudents={handleMoveStudents}
