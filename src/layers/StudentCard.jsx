@@ -14,7 +14,12 @@ const StudentCard = ({
       <button
         className="btn-here"
         onClick={() => handleMoveStudents(index)}
-        disabled={selectedStudents.length === 0}
+        disabled={
+          selectedStudents.length === 0 ||
+          selectedStudents.some((selectedStudent) => {
+            return selectedStudent.number !== numberClass; // проверь эту логику!
+          })
+        }
       >
         Переместить сюда
       </button>

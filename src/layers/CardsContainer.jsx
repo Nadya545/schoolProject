@@ -1,31 +1,52 @@
 import React from "react";
 import StudentCard from "./StudentCard";
+import NumberSelect from "../ui/NumberSelect";
+import LetterSelect from "../ui/LetterSelect";
+import InputName from "../ui/InputName";
+import InputSurname from "../ui/InputSurname";
 const CardsContainer = ({
   studentCards,
-  inputEvent,
-  setInputEvent,
+  inputEventName,
+  setInputEventName,
+  inputEventSurname,
+  setInputEventSurname,
   selectedStudents,
   setSelectedStudents,
   handleMoveStudents,
-  handleInput,
+  handleClickBtn,
+  numberSelect,
+  setNumberSelect,
+  letterSelect,
+  setLetterSelect,
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleInput();
+    handleClickBtn(
+      inputEventName,
+      inputEventSurname,
+      numberSelect,
+      letterSelect
+    );
   };
   return (
     <div className="CardsContainer">
-      <form className="inputForm">
-        <input
-          className="input"
-          type="text"
-          value={inputEvent}
-          onChange={(e) => setInputEvent(e.target.value)}
-        />
-        <button className="btnInput" onClick={handleSubmit} type="submit">
-          Ok
-        </button>
-      </form>
+      <InputName
+        handleSubmit={handleSubmit}
+        inputEventName={inputEventName}
+        setInputEventName={setInputEventName}
+      />
+      <InputSurname
+        inputEventSurname={inputEventSurname}
+        setInputEventSurname={setInputEventSurname}
+      />
+      <NumberSelect
+        numberSelect={numberSelect}
+        setNumberSelect={setNumberSelect}
+      />
+      <LetterSelect
+        letterSelect={letterSelect}
+        setLetterSelect={setLetterSelect}
+      />
       {studentCards.map((cardData, index) => (
         <StudentCard
           handleMoveStudents={handleMoveStudents}
