@@ -5,12 +5,25 @@
   justify-content: center;
   width: 100%;
 }
-
 .App {
   display: flex;
   width: 100%;
+}
+.home {
+  display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  width: 100%;
+}
+.ClassList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 20px;
+}
+.btn-class-list {
+  width: 10%;
 }
 .CardsContainer {
   display: flex;

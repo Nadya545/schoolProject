@@ -1,9 +1,6 @@
 import React from "react";
 import StudentCard from "./StudentCard";
-import NumberSelect from "../ui/NumberSelect";
-import LetterSelect from "../ui/LetterSelect";
-import InputName from "../ui/InputName";
-import InputSurname from "../ui/InputSurname";
+import Modal from "./Modal";
 const CardsContainer = ({
   studentCards,
   inputEventName,
@@ -30,23 +27,18 @@ const CardsContainer = ({
   };
   return (
     <div className="CardsContainer">
-      <InputName
+      <Modal
         handleSubmit={handleSubmit}
         inputEventName={inputEventName}
         setInputEventName={setInputEventName}
-      />
-      <InputSurname
         inputEventSurname={inputEventSurname}
         setInputEventSurname={setInputEventSurname}
-      />
-      <NumberSelect
         numberSelect={numberSelect}
         setNumberSelect={setNumberSelect}
-      />
-      <LetterSelect
         letterSelect={letterSelect}
         setLetterSelect={setLetterSelect}
       />
+
       {studentCards.map((cardData, index) => (
         <StudentCard
           handleMoveStudents={handleMoveStudents}

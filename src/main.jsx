@@ -1,9 +1,19 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import App from "./App.jsx";
+import * as React from "react";
+import * as ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { MyRouter } from "./router/MyRouter";
 
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
+const router = createBrowserRouter(MyRouter);
+const rootElement = document.getElementById("root");
+
+console.log("🚀 Application starting...");
+console.log("MyRouter config:", MyRouter);
+
+if (!rootElement) {
+  throw new Error("Root element not found");
+}
+ReactDOM.createRoot(rootElement).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );

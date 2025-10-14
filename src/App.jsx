@@ -1,125 +1,13 @@
-import { useState } from "react";
-import "./App.css";
-import CardsContainer from "./layers/CardsContainer";
-import { handleStudents } from "./hooks/useMyBigHook";
+import React from "react";
+import { Outlet } from "react-router-dom";
 
-function App() {
-  const cardsStudents = [
-    {
-      id: 1,
-      letter: "А",
-      number: 3,
-      students: [
-        { id: 1, name: "Петр", surname: "Поветкин" },
-        { id: 2, name: "Николай", surname: "Мишин" },
-        { id: 3, name: "Ольга", surname: "Клюева" },
-      ],
-    },
-    {
-      id: 2,
-      letter: "Б",
-      number: 3,
-      students: [
-        { id: 4, name: "Василий", surname: "Иванов" },
-        { id: 5, name: "Кирилл", surname: "Петров" },
-        { id: 6, name: "Лариса", surname: "Никифоровна" },
-      ],
-    },
-    {
-      id: 3,
-      letter: "А",
-      number: 10,
-      students: [
-        { id: 7, name: "Егор", surname: "Клейменов" },
-        { id: 8, name: "Арина", surname: "Светлакова" },
-        { id: 9, name: "Богдан", surname: "Нежин" },
-      ],
-    },
-    {
-      id: 4,
-      letter: "Б",
-      number: 10,
-      students: [
-        { id: 10, name: "Марина", surname: "Кондурова" },
-        { id: 11, name: "Павел", surname: "Дуров" },
-        { id: 12, name: "Надежда", surname: "Островянская" },
-      ],
-    },
-  ];
-
-  const [studentCards, setStudentCards] = useState(cardsStudents);
-  const [inputEventName, setInputEventName] = useState("");
-  const [inputEventSurname, setInputEventSurname] = useState("");
-
-  const [selectedStudents, setSelectedStudents] = useState([]); //массив обьектов
-
-  const [numberSelect, setNumberSelect] = useState("");
-  const [letterSelect, setLetterSelect] = useState("");
-
-  const { handleMoveStudentsById, createNewStudents } = handleStudents(
-    studentCards,
-    setStudentCards
-  );
-
-  const handleClickBtn = (
-    inputEventName,
-    inputEventSurname,
-    numberSelect,
-    letterSelect
-  ) => {
-    console.log("inputEventName перед вызовом:", inputEventName);
-    console.log("inputEventSurname перед вызовом:", inputEventSurname);
-    console.log("numberSelect перед вызовом:", numberSelect);
-    console.log("letterSelect перед вызовом:", letterSelect);
-    createNewStudents(
-      inputEventName,
-      inputEventSurname,
-      numberSelect,
-      letterSelect
-    );
-    setInputEventName("");
-    setInputEventSurname("");
-    setNumberSelect("");
-    setLetterSelect("");
-  };
-
-  const handleMoveStudents = (index) => {
-    const newStudentCards = handleMoveStudentsById(
-      selectedStudents,
-      index,
-      studentCards
-    ); //достаю  newCards: и  movedStudents
-    setStudentCards(newStudentCards.newCards);
-    const remainStudents = selectedStudents.filter((student) => {
-      const wasMove = newStudentCards.movedStudents.some((moveStudent) => {
-        return moveStudent.id === student.id;
-      });
-      return !wasMove;
-    });
-    setSelectedStudents(remainStudents);
-    console.log("Перемещенные:", newStudentCards.movedStudents);
-    console.log("Остались выбранными:", remainStudents);
-  };
-
+const App = () => {
+  console.log("🔵 App component rendered");
   return (
     <div className="App">
-      <CardsContainer
-        selectedStudents={selectedStudents}
-        setSelectedStudents={setSelectedStudents}
-        handleMoveStudents={handleMoveStudents}
-        studentCards={studentCards}
-        inputEventName={inputEventName}
-        setInputEventName={setInputEventName}
-        inputEventSurname={inputEventSurname}
-        setInputEventSurname={setInputEventSurname}
-        handleClickBtn={handleClickBtn}
-        numberSelect={numberSelect}
-        setNumberSelect={setNumberSelect}
-        letterSelect={letterSelect}
-        setLetterSelect={setLetterSelect}
-      />
+      <Outlet />
     </div>
   );
-}
+};
 
 export default App;
