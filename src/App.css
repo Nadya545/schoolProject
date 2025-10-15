@@ -15,6 +15,12 @@
   justify-content: center;
   flex-direction: column;
   width: 100%;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-size: 18px;
+}
+.home-p {
+  font-size: 22px;
 }
 .ClassList {
   display: flex;
@@ -22,14 +28,41 @@
   width: 100%;
   gap: 20px;
 }
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
 .btn-class-list {
-  width: 10%;
+  padding: 10px 20px;
+  border: 2px solid #4a90e2;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: white;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  border-radius: 6px;
+  align-self: flex-end;
+  width: auto;
+  margin: 20px;
+}
+.btn-class-list:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
 }
 .CardsContainer {
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
   gap: 30px;
+}
+.mainCardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.groupNumber {
+  display: flex;
+  gap: 30px;
+  width: 100%;
 }
 .studentCard {
   display: flex;
@@ -40,6 +73,7 @@
   padding: 20px;
   background: white;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  width: 20%;
 }
 .inputForm {
   display: flex;
@@ -137,4 +171,21 @@
   width: 50%;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   border-radius: 6px;
+}
+
+.btn-modal {
+  padding: 10px 20px;
+  border: 2px solid #4a90e2;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: white;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  border-radius: 6px;
+  width: auto;
+  margin: 20px;
+}
+
+.btn-modal:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
 }

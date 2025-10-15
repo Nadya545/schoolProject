@@ -53,6 +53,35 @@ function ClassList() {
       ],
     },
   ];
+  const groupCards = (arr) => {
+    const groups = arr.reduce((group, card) => {
+      const number = card.number;
+      if (!group[number]) {
+        group[number] = [];
+      }
+      group[number].push(card);
+      return group;
+    }, {});
+    return groups;
+  };
+
+  /*{
+  3: [
+    {id:1, number:3, letter:"А", students: [...]},
+    {id:2, number:3, letter:"Б", students: [...]}
+  ],
+  10: [
+    {id:3, number:10, letter:"А", students: [...]},
+    {id:4, number:10, letter:"Б", students: [...]}
+  ]
+}*/
+
+  const groupSortNumber = (arr) => {
+    const sort = Object.keys(arr).sort((a, b) => {
+      return a - b;
+    });
+    return sort;
+  };
 
   const [studentCards, setStudentCards] = useState(cardsStudents);
   const [inputEventName, setInputEventName] = useState("");
@@ -110,10 +139,6 @@ function ClassList() {
 
   return (
     <div className="ClassList">
-      <button className="btn-class-list" onClick={handleLogout}>
-        Выход
-      </button>
-
       <CardsContainer
         selectedStudents={selectedStudents}
         setSelectedStudents={setSelectedStudents}
@@ -128,6 +153,9 @@ function ClassList() {
         setNumberSelect={setNumberSelect}
         letterSelect={letterSelect}
         setLetterSelect={setLetterSelect}
+        handleLogout={handleLogout}
+        groupCards={groupCards}
+        groupSortNumber={groupSortNumber}
       />
     </div>
   );

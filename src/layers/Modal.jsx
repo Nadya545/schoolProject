@@ -24,7 +24,9 @@ const Modal = ({
 
   return (
     <div className="modal">
-      <button onClick={openModal}>Добавить ученика</button>
+      <button className="btn-modal" onClick={openModal}>
+        Добавить ученика
+      </button>
       {isOpen === true && (
         <div className="modal-open">
           <InputName
