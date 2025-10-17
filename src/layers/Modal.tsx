@@ -29,26 +29,30 @@ const Modal = ({
       </button>
       {isOpen === true && (
         <div className="modal-open">
-          <InputName
-            handleSubmit={handleSubmit}
-            inputEventName={inputEventName}
-            setInputEventName={setInputEventName}
-          />
-          <InputSurname
-            inputEventSurname={inputEventSurname}
-            setInputEventSurname={setInputEventSurname}
-          />
-          <NumberSelect
-            numberSelect={numberSelect}
-            setNumberSelect={setNumberSelect}
-          />
-          <LetterSelect
-            letterSelect={letterSelect}
-            setLetterSelect={setLetterSelect}
-          />
-          <button onClick={closeModal} className="modal-close">
-            Закрыть{" "}
-          </button>
+          <div className="modal-content">
+            <button onClick={closeModal} className="modal-close">
+              ×
+            </button>
+            <div className="modal-body">
+              <InputName
+                handleSubmit={handleSubmit}
+                inputEventName={inputEventName}
+                setInputEventName={setInputEventName}
+              />
+              <InputSurname
+                inputEventSurname={inputEventSurname}
+                setInputEventSurname={setInputEventSurname}
+              />
+              <NumberSelect
+                numberSelect={numberSelect}
+                setNumberSelect={setNumberSelect}
+              />
+              <LetterSelect
+                letterSelect={letterSelect}
+                setLetterSelect={setLetterSelect}
+              />
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -1,20 +1,24 @@
 import React from "react";
+import { SelectedStudent } from "../interfaces/interfaces";
 
 const Student = ({
   student,
   numberClass,
   selectedStudents,
   setSelectedStudents,
+  cardLetter,
 }) => {
-  const isSelected = selectedStudents.some((selectedStudent) => {
-    return selectedStudent.id === student.id;
-  });
+  const isSelected = selectedStudents.some(
+    (selectedStudent: SelectedStudent) => {
+      return selectedStudent.id === student.id;
+    }
+  );
 
   const handleCheckBox = () => {
     if (isSelected) {
       /*список id и номер класса студентов, если  выбран студент, стоит галка*/
       const filterSelectedStudents = selectedStudents.filter(
-        (selectedStudent) => {
+        (selectedStudent: SelectedStudent) => {
           return selectedStudent.id !== student.id;
         }
       );
@@ -25,6 +29,7 @@ const Student = ({
         {
           id: student.id,
           number: numberClass,
+          letter: cardLetter,
         },
       ]);
     }

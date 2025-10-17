@@ -1,5 +1,10 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
 #root {
-  margin: 0 auto;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,9 +20,13 @@
   justify-content: center;
   flex-direction: column;
   width: 100%;
+  height: 100vh;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   font-size: 18px;
+  color: rgb(33, 33, 119);
+  background-image: url(https://i.pinimg.com/736x/40/5e/c1/405ec13d579af33ed54239055e909764.jpg);
+  background-size: cover;
 }
 .home-p {
   font-size: 22px;
@@ -27,6 +36,12 @@
   flex-direction: column;
   width: 100%;
   gap: 20px;
+  height: 100vh;
+  background-image: url(https://i.pinimg.com/1200x/46/b6/50/46b6504a245ae91517ca2e6d370aa06e.jpg); /*https://i.pinimg.com/1200x/29/41/c7/2941c7efe1827ffa6d213a097a6f0b04.jpg*/
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 .buttons {
   display: flex;
@@ -63,6 +78,7 @@
   display: flex;
   gap: 30px;
   width: 100%;
+  justify-content: center;
 }
 .studentCard {
   display: flex;
@@ -78,6 +94,7 @@
 .inputForm {
   display: flex;
   width: 100%;
+  z-index: 1;
 }
 .input,
 .input2 {
@@ -90,6 +107,7 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   width: 100%;
   cursor: pointer;
+  z-index: 1;
 }
 .input2 {
   border-top-right-radius: 6px;
@@ -102,8 +120,9 @@
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
   padding: 8px 16px;
-  font-size: 14px;
+  font-size: 12px;
   cursor: pointer;
+  z-index: 1;
 }
 .class {
   display: flex;
@@ -168,7 +187,7 @@
   font-size: 14px;
   cursor: pointer;
   display: flex;
-  width: 50%;
+  width: 70%;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   border-radius: 6px;
 }
@@ -188,4 +207,60 @@
 .btn-modal:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+.modal {
+  width: 100%;
+}
+.modal-open {
+  background-color: rgba(169, 169, 169, 0.5);
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: white;
+  padding: 45px 20px 20px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 300px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.modal-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #4a90e2;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  line-height: 1;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Добавляем тень */
+}
+
+.modal-close:hover {
+  background: #f0f0f0;
+  color: #ff4757;
+  transform: scale(1.1);
 }

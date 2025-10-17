@@ -1,5 +1,20 @@
-export const handleStudents = (studentCards, setStudentCards) => {
-  const createNewStudents = (str1, str2, num, lett) => {
+import {
+  Student,
+  StudentCard,
+  SelectedStudent,
+  MoveStudentsResult,
+} from "../interfaces/interfaces";
+
+export const handleStudents = (
+  studentCards: StudentCard[],
+  setStudentCards: React.Dispatch<React.SetStateAction<StudentCard[]>>
+) => {
+  const createNewStudents = (
+    str1: string,
+    str2: string,
+    num: number,
+    lett: string
+  ) => {
     console.log("=== НАЧАЛО createNewStudents ===");
     console.log("Параметры:", { str1, str2, num, lett });
     if (!str1 || (str1.trim() === "" && !str2) || str2.trim() === "") {
@@ -29,8 +44,9 @@ export const handleStudents = (studentCards, setStudentCards) => {
       }
     };
     const newId = getIdStudent();
-    const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
-    const newStudent = {
+    const capitalize = (str: string) =>
+      str.charAt(0).toUpperCase() + str.slice(1);
+    const newStudent: Student = {
       id: newId,
       name: capitalize(str1),
       surname: capitalize(str2),
@@ -66,10 +82,16 @@ export const handleStudents = (studentCards, setStudentCards) => {
     console.log("=== КОНЕЦ createNewStudents ===");
   };
 
-  const handleMoveStudentsById = (selectedStudents, targetCardIndex, cards) => {
+  const handleMoveStudentsById = (
+    selectedStudents: SelectedStudent[],
+    targetCardIndex: number,
+    cards: StudentCard[],
+    numberSelect: string,
+    letterSelect: string
+  ): MoveStudentsResult => {
     /*1)СОБИРАЮ студентов В itemsToMove для перемещения*/
 
-    const itemsToMove = [];
+    const itemsToMove: Student[] = [];
 
     for (let i = 0; i < cards.length; i++) {
       const card = cards[i];
@@ -99,6 +121,7 @@ export const handleStudents = (studentCards, setStudentCards) => {
           students: [...card.students],
         })),
         movedStudents: [],
+        notMovedStudents: [],
       };
     }
 
@@ -119,17 +142,21 @@ export const handleStudents = (studentCards, setStudentCards) => {
     });
 
     if (targetCardIndex >= newCards.length) {
-      newCards.push({
+      const newCard: StudentCard = {
+        id: Date.now(),
+        number: Number(numberSelect),
+        letter: letterSelect,
         students: [...itemsToMove],
-      });
+      };
+      newCards.push(newCard);
       return {
         newCards: newCards,
         movedStudents: itemsToMove,
         notMovedStudents: [],
       };
     }
-    let movedStudents = [];
-    let notMovedStudents = [];
+    let movedStudents: Student[] = [];
+    let notMovedStudents: Student[] = [];
 
     const addItemToMoveInNewCards = newCards.map((card, index) => {
       const numberCard = newCards[targetCardIndex].number;

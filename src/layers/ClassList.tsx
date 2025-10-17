@@ -1,8 +1,16 @@
+import React from "react";
 import { useState } from "react";
 import "../App.css";
 import CardsContainer from "./CardsContainer";
 import { handleStudents } from "../hooks/useMyBigHook";
 import { useNavigate } from "react-router-dom";
+import {
+  Student,
+  StudentCard,
+  SelectedStudent,
+  MoveStudentsResult,
+} from "../interfaces/interfaces";
+import { Group } from "../interfaces/interfaces";
 
 function ClassList() {
   const navigate = useNavigate();
@@ -11,7 +19,8 @@ function ClassList() {
     localStorage.removeItem("user");
     navigate("/");
   };
-  const cardsStudents = [
+
+  const cardsStudents: StudentCard[] = [
     {
       id: 1,
       letter: "А",
@@ -53,15 +62,19 @@ function ClassList() {
       ],
     },
   ];
-  const groupCards = (arr) => {
-    const groups = arr.reduce((group, card) => {
-      const number = card.number;
-      if (!group[number]) {
-        group[number] = [];
-      }
-      group[number].push(card);
-      return group;
-    }, {});
+
+  const groupCards = (arr: StudentCard[]) => {
+    const groups = arr.reduce(
+      (group: { [key: number]: StudentCard[] }, card: StudentCard) => {
+        const number = card.number;
+        if (!group[number]) {
+          group[number] = [];
+        }
+        group[number].push(card);
+        return group;
+      },
+      {}
+    );
     return groups;
   };
 
@@ -76,10 +89,13 @@ function ClassList() {
   ]
 }*/
 
-  const groupSortNumber = (arr) => {
-    const sort = Object.keys(arr).sort((a, b) => {
-      return a - b;
-    });
+  const groupSortNumber = (arr: Group) => {
+    const sort = Object.keys(arr)
+      .map(Number)
+      .sort((a, b) => {
+        return a - b;
+      });
+
     return sort;
   };
 
@@ -87,7 +103,9 @@ function ClassList() {
   const [inputEventName, setInputEventName] = useState("");
   const [inputEventSurname, setInputEventSurname] = useState("");
 
-  const [selectedStudents, setSelectedStudents] = useState([]); //массив обьектов
+  const [selectedStudents, setSelectedStudents] = useState<SelectedStudent[]>(
+    []
+  ); //массив обьектов
 
   const [numberSelect, setNumberSelect] = useState("");
   const [letterSelect, setLetterSelect] = useState("");
@@ -98,11 +116,16 @@ function ClassList() {
   );
 
   const handleClickBtn = (
-    inputEventName,
-    inputEventSurname,
-    numberSelect,
-    letterSelect
+    inputEventName: string,
+    inputEventSurname: string,
+    numberSelect: string,
+    letterSelect: string
   ) => {
+    if (numberSelect === "") {
+      ("Выберете номер класса!");
+      return;
+    }
+    const numberSelectAsNumber = Number(numberSelect);
     console.log("inputEventName перед вызовом:", inputEventName);
     console.log("inputEventSurname перед вызовом:", inputEventSurname);
     console.log("numberSelect перед вызовом:", numberSelect);
@@ -110,7 +133,7 @@ function ClassList() {
     createNewStudents(
       inputEventName,
       inputEventSurname,
-      numberSelect,
+      numberSelectAsNumber,
       letterSelect
     );
     setInputEventName("");
@@ -119,12 +142,15 @@ function ClassList() {
     setLetterSelect("");
   };
 
-  const handleMoveStudents = (index) => {
+  const handleMoveStudents = (index: number) => {
     const newStudentCards = handleMoveStudentsById(
       selectedStudents,
       index,
-      studentCards
+      studentCards,
+      numberSelect,
+      letterSelect
     ); //достаю  newCards: и  movedStudents
+
     setStudentCards(newStudentCards.newCards);
     const remainStudents = selectedStudents.filter((student) => {
       const wasMove = newStudentCards.movedStudents.some((moveStudent) => {

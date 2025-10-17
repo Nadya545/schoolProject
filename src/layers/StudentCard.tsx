@@ -1,14 +1,19 @@
 import React from "react";
 import Student from "./Student";
+import {
+  SelectedStudent,
+  Student as StudentType,
+} from "../interfaces/interfaces";
 const StudentCard = ({
   cardData,
-
   handleMoveStudents,
   index,
   selectedStudents,
   setSelectedStudents,
 }) => {
   const numberClass = cardData.number;
+  const cardLetter = cardData.letter;
+
   return (
     <div className="studentCard">
       <button
@@ -16,8 +21,11 @@ const StudentCard = ({
         onClick={() => handleMoveStudents(index)}
         disabled={
           selectedStudents.length === 0 ||
-          selectedStudents.some((selectedStudent) => {
-            return selectedStudent.number !== numberClass; // проверь эту логику!
+          selectedStudents.some((selectedStudent: SelectedStudent) => {
+            return (
+              selectedStudent.number !== numberClass ||
+              selectedStudent.letter === cardLetter
+            );
           })
         }
       >
@@ -28,8 +36,9 @@ const StudentCard = ({
         {cardData.number}
         {cardData.letter}
       </div>
-      {cardData.students.map((student) => (
+      {cardData.students.map((student: StudentType) => (
         <Student
+          cardLetter={cardLetter}
           numberClass={numberClass}
           student={student}
           key={student.id}

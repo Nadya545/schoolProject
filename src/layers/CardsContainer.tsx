@@ -1,7 +1,9 @@
 import React from "react";
 import StudentCard from "./StudentCard";
 import Modal from "./Modal";
-const CardsContainer = ({
+import { CardsContainerProps } from "../interfaces/interfaces";
+
+const CardsContainer: React.FC<CardsContainerProps> = ({
   studentCards,
   inputEventName,
   setInputEventName,
