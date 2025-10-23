@@ -1,3 +1,5 @@
+import { AppDispatch } from "../store";
+
 export interface Student {
   id: number;
   name: string;
@@ -31,21 +33,22 @@ export interface CardsContainerProps {
   cardLetter: string;
   studentCards: StudentCard[];
   inputEventName: string;
-  setInputEventName: (value: string) => void;
   inputEventSurname: string;
-  setInputEventSurname: (value: string) => void;
   selectedStudents: SelectedStudent[];
-  setSelectedStudents: (students: SelectedStudent[]) => void;
+  numberSelect: number;
+  letterSelect: string;
+  dispatch?: AppDispatch;
+  setInputEventName: (value: string) => void;
+  setInputEventSurname: (value: string) => void;
+  setSelectedStudents?: (students: SelectedStudent[]) => void;
   handleMoveStudents: (index: number) => void;
   handleClickBtn: (
     name: string,
     surname: string,
-    number: string,
+    number: number,
     letter: string
   ) => void;
-  numberSelect: string;
-  setNumberSelect: (value: string) => void;
-  letterSelect: string;
+  setNumberSelect: (value: number) => void;
   setLetterSelect: (value: string) => void;
   handleLogout: () => void;
   groupCards: (arr: StudentCard[]) => Group;

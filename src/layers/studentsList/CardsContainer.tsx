@@ -1,27 +1,28 @@
 import React from "react";
 import StudentCard from "./StudentCard";
-import Modal from "./Modal";
-import { CardsContainerProps } from "../interfaces/interfaces";
+import { CardsContainerProps } from "../../types/studentType";
+import Button from "../../ui/button/Button";
+import AddStudentModal from "../../ui/modal/AddStudentModal";
 
 const CardsContainer: React.FC<CardsContainerProps> = ({
+  dispatch,
   studentCards,
   inputEventName,
-  setInputEventName,
   inputEventSurname,
-  setInputEventSurname,
   selectedStudents,
-  setSelectedStudents,
+  numberSelect,
+  letterSelect,
+  setInputEventName,
+  setInputEventSurname,
   handleMoveStudents,
   handleClickBtn,
-  numberSelect,
   setNumberSelect,
-  letterSelect,
   setLetterSelect,
   handleLogout,
   groupCards,
   groupSortNumber,
 }) => {
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleClickBtn(
       inputEventName,
@@ -36,20 +37,24 @@ const CardsContainer: React.FC<CardsContainerProps> = ({
   return (
     <div className="CardsContainer">
       <div className="buttons">
-        <Modal
-          handleSubmit={handleSubmit}
+        <AddStudentModal
           inputEventName={inputEventName}
-          setInputEventName={setInputEventName}
           inputEventSurname={inputEventSurname}
-          setInputEventSurname={setInputEventSurname}
           numberSelect={numberSelect}
-          setNumberSelect={setNumberSelect}
           letterSelect={letterSelect}
+          handleSubmit={handleSubmit}
+          setInputEventName={setInputEventName}
+          setInputEventSurname={setInputEventSurname}
+          setNumberSelect={setNumberSelect}
           setLetterSelect={setLetterSelect}
         />
-        <button className="btn-class-list" onClick={handleLogout}>
+        <Button
+          size="addAndOut"
+          className="btn-class-list"
+          onClick={handleLogout}
+        >
           Выход
-        </button>
+        </Button>
       </div>
 
       {sortNum.map((number) => (
@@ -58,12 +63,12 @@ const CardsContainer: React.FC<CardsContainerProps> = ({
             .sort((a, b) => a.letter.localeCompare(b.letter))
             .map((cardData, index) => (
               <StudentCard
-                handleMoveStudents={handleMoveStudents}
+                dispatch={dispatch}
                 cardData={cardData}
                 key={cardData.id}
                 selectedStudents={selectedStudents}
-                setSelectedStudents={setSelectedStudents}
                 index={index}
+                handleMoveStudents={handleMoveStudents}
               />
             ))}
         </div>

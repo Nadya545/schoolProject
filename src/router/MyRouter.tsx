@@ -2,8 +2,9 @@ import { RouteObject } from "react-router-dom";
 import React from "react";
 import App from "../App";
 import RouterErrorElement from "./RouterErrorElement";
-import ClassList from "../layers/ClassList";
-import Welcome from "../layers/Welcome";
+
+import Welcome from "../layers/mainPage/Welcome";
+import StudentsList from "../layers/studentsList/StudentsList";
 
 export const MyRouter: RouteObject[] = [
   {
@@ -18,7 +19,7 @@ export const MyRouter: RouteObject[] = [
       },
       {
         path: "class-list",
-        element: <ClassList />,
+        element: <StudentsList />,
       },
     ],
   },

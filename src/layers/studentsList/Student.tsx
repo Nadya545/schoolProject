@@ -1,12 +1,16 @@
 import React from "react";
-import { SelectedStudent } from "../interfaces/interfaces";
+import { SelectedStudent } from "../../types/studentType";
+import {
+  updateSelectedStudents,
+  updateStudentCards,
+} from "../../store/slices/studentsSlice";
 
 const Student = ({
   student,
   numberClass,
-  selectedStudents,
-  setSelectedStudents,
   cardLetter,
+  selectedStudents,
+  dispatch,
 }) => {
   const isSelected = selectedStudents.some(
     (selectedStudent: SelectedStudent) => {
@@ -17,21 +21,24 @@ const Student = ({
   const handleCheckBox = () => {
     if (isSelected) {
       /*список id и номер класса студентов, если  выбран студент, стоит галка*/
-      const filterSelectedStudents = selectedStudents.filter(
-        (selectedStudent: SelectedStudent) => {
-          return selectedStudent.id !== student.id;
-        }
+      dispatch(
+        updateSelectedStudents(
+          selectedStudents.filter((selectedStudent: SelectedStudent) => {
+            return selectedStudent.id !== student.id;
+          })
+        )
       );
-      setSelectedStudents(filterSelectedStudents);
     } else {
-      setSelectedStudents([
-        ...selectedStudents,
-        {
-          id: student.id,
-          number: numberClass,
-          letter: cardLetter,
-        },
-      ]);
+      dispatch(
+        updateSelectedStudents([
+          ...selectedStudents,
+          {
+            id: student.id,
+            number: numberClass,
+            letter: cardLetter,
+          },
+        ])
+      );
     }
   };
 

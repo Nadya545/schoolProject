@@ -1,18 +1,26 @@
 import React from "react";
 import { useState } from "react";
-import "../App.css";
+import "../../App.css";
 import CardsContainer from "./CardsContainer";
-import { handleStudents } from "../hooks/useMyBigHook";
+import { handleStudents } from "../../hooks/useHandleStudent";
 import { useNavigate } from "react-router-dom";
+import { StudentCard, SelectedStudent } from "../../types/studentType";
+import { Group } from "../../types/studentType";
+import { cardsStudentsData } from "../../constants/CartStudents";
+import { useAppSelector } from "../../store/hooks";
 import {
-  Student,
-  StudentCard,
-  SelectedStudent,
-  MoveStudentsResult,
-} from "../interfaces/interfaces";
-import { Group } from "../interfaces/interfaces";
+  updateSelectedStudents,
+  updateStudentCards,
+} from "../../store/slices/studentsSlice";
+import { useDispatch } from "react-redux";
 
-function ClassList() {
+function StudentsList() {
+  const dispatch = useDispatch();
+  const studentCards = useAppSelector((state) => state.students.studentCards);
+  const selectedStudents = useAppSelector(
+    (state) => state.students.selectedStudents
+  );
+
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -20,48 +28,7 @@ function ClassList() {
     navigate("/");
   };
 
-  const cardsStudents: StudentCard[] = [
-    {
-      id: 1,
-      letter: "А",
-      number: 3,
-      students: [
-        { id: 1, name: "Петр", surname: "Поветкин" },
-        { id: 2, name: "Николай", surname: "Мишин" },
-        { id: 3, name: "Ольга", surname: "Клюева" },
-      ],
-    },
-    {
-      id: 2,
-      letter: "Б",
-      number: 3,
-      students: [
-        { id: 4, name: "Василий", surname: "Иванов" },
-        { id: 5, name: "Кирилл", surname: "Петров" },
-        { id: 6, name: "Лариса", surname: "Никифоровна" },
-      ],
-    },
-    {
-      id: 3,
-      letter: "А",
-      number: 10,
-      students: [
-        { id: 7, name: "Егор", surname: "Клейменов" },
-        { id: 8, name: "Арина", surname: "Светлакова" },
-        { id: 9, name: "Богдан", surname: "Нежин" },
-      ],
-    },
-    {
-      id: 4,
-      letter: "Б",
-      number: 10,
-      students: [
-        { id: 10, name: "Марина", surname: "Кондурова" },
-        { id: 11, name: "Павел", surname: "Дуров" },
-        { id: 12, name: "Надежда", surname: "Островянская" },
-      ],
-    },
-  ];
+  const cardsStudents: StudentCard[] = cardsStudentsData;
 
   const groupCards = (arr: StudentCard[]) => {
     const groups = arr.reduce(
@@ -78,17 +45,6 @@ function ClassList() {
     return groups;
   };
 
-  /*{
-  3: [
-    {id:1, number:3, letter:"А", students: [...]},
-    {id:2, number:3, letter:"Б", students: [...]}
-  ],
-  10: [
-    {id:3, number:10, letter:"А", students: [...]},
-    {id:4, number:10, letter:"Б", students: [...]}
-  ]
-}*/
-
   const groupSortNumber = (arr: Group) => {
     const sort = Object.keys(arr)
       .map(Number)
@@ -99,29 +55,27 @@ function ClassList() {
     return sort;
   };
 
-  const [studentCards, setStudentCards] = useState(cardsStudents);
   const [inputEventName, setInputEventName] = useState("");
   const [inputEventSurname, setInputEventSurname] = useState("");
-
-  const [selectedStudents, setSelectedStudents] = useState<SelectedStudent[]>(
-    []
-  ); //массив обьектов
-
-  const [numberSelect, setNumberSelect] = useState("");
+  const [numberSelect, setNumberSelect] = useState<number>(0);
   const [letterSelect, setLetterSelect] = useState("");
+  /* const [studentCards, setStudentCards] = useState(cardsStudents); redux */
+  /*const [selectedStudents, setSelectedStudents] = useState<SelectedStudent[]>(
+    []
+  ); //массив обьектов redux*/
 
   const { handleMoveStudentsById, createNewStudents } = handleStudents(
     studentCards,
-    setStudentCards
+    (newCards) => dispatch(updateStudentCards(newCards))
   );
 
   const handleClickBtn = (
     inputEventName: string,
     inputEventSurname: string,
-    numberSelect: string,
+    numberSelect: number,
     letterSelect: string
   ) => {
-    if (numberSelect === "") {
+    if (!numberSelect) {
       ("Выберете номер класса!");
       return;
     }
@@ -138,7 +92,7 @@ function ClassList() {
     );
     setInputEventName("");
     setInputEventSurname("");
-    setNumberSelect("");
+    setNumberSelect(0);
     setLetterSelect("");
   };
 
@@ -151,33 +105,35 @@ function ClassList() {
       letterSelect
     ); //достаю  newCards: и  movedStudents
 
-    setStudentCards(newStudentCards.newCards);
-    const remainStudents = selectedStudents.filter((student) => {
-      const wasMove = newStudentCards.movedStudents.some((moveStudent) => {
-        return moveStudent.id === student.id;
-      });
-      return !wasMove;
-    });
-    setSelectedStudents(remainStudents);
-    console.log("Перемещенные:", newStudentCards.movedStudents);
-    console.log("Остались выбранными:", remainStudents);
+    dispatch(updateStudentCards(newStudentCards.newCards));
+    dispatch(
+      updateSelectedStudents(
+        selectedStudents.filter((student) => {
+          const wasMove = newStudentCards.movedStudents.some((moveStudent) => {
+            return moveStudent.id === student.id;
+          });
+          return !wasMove;
+        })
+      )
+    );
   };
 
   return (
     <div className="ClassList">
       <CardsContainer
+        dispatch={dispatch}
         selectedStudents={selectedStudents}
-        setSelectedStudents={setSelectedStudents}
-        handleMoveStudents={handleMoveStudents}
         studentCards={studentCards}
         inputEventName={inputEventName}
-        setInputEventName={setInputEventName}
         inputEventSurname={inputEventSurname}
+        letterSelect={letterSelect}
+        cardLetter={""}
+        handleMoveStudents={handleMoveStudents}
+        setInputEventName={setInputEventName}
         setInputEventSurname={setInputEventSurname}
         handleClickBtn={handleClickBtn}
         numberSelect={numberSelect}
         setNumberSelect={setNumberSelect}
-        letterSelect={letterSelect}
         setLetterSelect={setLetterSelect}
         handleLogout={handleLogout}
         groupCards={groupCards}
@@ -187,4 +143,4 @@ function ClassList() {
   );
 }
 
-export default ClassList;
+export default StudentsList;

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./welcome.scss";
 const Welcome = () => {
   console.log("🟢 Welcome component rendered");
   return (

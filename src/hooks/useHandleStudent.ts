@@ -1,9 +1,10 @@
+import { useDispatch } from "react-redux";
 import {
   Student,
   StudentCard,
   SelectedStudent,
   MoveStudentsResult,
-} from "../interfaces/interfaces";
+} from "../types/studentType";
 
 export const handleStudents = (
   studentCards: StudentCard[],
@@ -15,7 +16,6 @@ export const handleStudents = (
     num: number,
     lett: string
   ) => {
-    console.log("=== НАЧАЛО createNewStudents ===");
     console.log("Параметры:", { str1, str2, num, lett });
     if (!str1 || (str1.trim() === "" && !str2) || str2.trim() === "") {
       alert("Введите данные ученика!");
@@ -86,7 +86,7 @@ export const handleStudents = (
     selectedStudents: SelectedStudent[],
     targetCardIndex: number,
     cards: StudentCard[],
-    numberSelect: string,
+    numberSelect: number,
     letterSelect: string
   ): MoveStudentsResult => {
     /*1)СОБИРАЮ студентов В itemsToMove для перемещения*/
