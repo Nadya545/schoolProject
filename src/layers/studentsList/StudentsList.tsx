@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import "../../App.css";
+import "../../App.scss";
 import CardsContainer from "./CardsContainer";
 import { handleStudents } from "../../hooks/useHandleStudent";
 import { useNavigate } from "react-router-dom";

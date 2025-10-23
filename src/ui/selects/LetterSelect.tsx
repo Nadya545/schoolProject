@@ -1,4 +1,5 @@
 import React from "react";
+import "./selects.scss";
 
 const LetterSelect = ({ letterSelect, setLetterSelect }) => {
   const letter = ["А", "Б", "В"];

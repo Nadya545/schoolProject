@@ -1,0 +1,93 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+#root {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  .App {
+    display: flex;
+    width: 100%;
+
+    .ClassList {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 20px;
+      height: 100vh;
+      background-image: url(https://i.pinimg.com/1200x/46/b6/50/46b6504a245ae91517ca2e6d370aa06e.jpg); /*https://i.pinimg.com/1200x/29/41/c7/2941c7efe1827ffa6d213a097a6f0b04.jpg*/
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      .CardsContainer {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 30px;
+        .buttons {
+          display: flex;
+          justify-content: space-between;
+        }
+        .groupNumber {
+          display: flex;
+          gap: 30px;
+          width: 100%;
+          justify-content: center;
+
+          .studentCard {
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid #4a90e2;
+            border-radius: 12px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            width: 20%;
+
+            &:hover {
+              transform: translateY(-5px);
+              box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+            }
+          }
+
+          .class {
+            display: flex;
+            margin-top: 10px;
+          }
+
+          .student {
+            width: 100%;
+            display: flex;
+            font-size: 20px;
+            font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+              "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            .checkbox {
+              display: flex;
+              align-items: center;
+              cursor: pointer;
+              width: 100%;
+
+              & input[type="checkbox"] {
+                margin-right: 10px;
+                transform: scale(1.2);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
