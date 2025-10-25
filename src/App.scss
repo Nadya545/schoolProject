@@ -18,12 +18,13 @@ body {
       flex-direction: column;
       width: 100%;
       gap: 20px;
-      height: 100vh;
+      min-height: 100vh;
       background-image: url(https://i.pinimg.com/1200x/46/b6/50/46b6504a245ae91517ca2e6d370aa06e.jpg); /*https://i.pinimg.com/1200x/29/41/c7/2941c7efe1827ffa6d213a097a6f0b04.jpg*/
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       background-attachment: fixed;
+
       .CardsContainer {
         display: flex;
         flex-direction: column;
@@ -89,5 +90,14 @@ body {
         }
       }
     }
+  }
+}
+@media (max-width: 770px) {
+  .groupNumber {
+    flex-direction: column;
+    align-items: center;
+  }
+  .studentCard {
+    width: 60% !important;
   }
 }

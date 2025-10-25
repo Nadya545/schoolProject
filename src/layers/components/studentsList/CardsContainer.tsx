@@ -1,17 +1,17 @@
 import React from "react";
 import StudentCard from "./StudentCard";
-import { CardsContainerProps } from "../../types/studentType";
-import Button from "../../ui/button/Button";
-import AddStudentModal from "../../ui/modal/AddStudentModal";
+import { CardData, CardsContainerProps } from "../../../types/studentType";
+import Button from "../../../ui/button/Button";
+import AddStudentModal from "../../../ui/modal/AddStudentModal";
 
 const CardsContainer: React.FC<CardsContainerProps> = ({
-  dispatch,
   studentCards,
   inputEventName,
   inputEventSurname,
   selectedStudents,
   numberSelect,
   letterSelect,
+  dispatch,
   setInputEventName,
   setInputEventSurname,
   handleMoveStudents,
@@ -61,7 +61,7 @@ const CardsContainer: React.FC<CardsContainerProps> = ({
         <div key={number} className="groupNumber">
           {groups[number]
             .sort((a, b) => a.letter.localeCompare(b.letter))
-            .map((cardData, index) => (
+            .map((cardData: CardData, index) => (
               <StudentCard
                 dispatch={dispatch}
                 cardData={cardData}

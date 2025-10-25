@@ -1,17 +1,17 @@
 import React from "react";
 import { useState } from "react";
-import "../../App.scss";
+import "../../../App.scss";
 import CardsContainer from "./CardsContainer";
-import { handleStudents } from "../../hooks/useHandleStudent";
+import { handleStudents } from "../../../hooks/useHandleStudent";
 import { useNavigate } from "react-router-dom";
-import { StudentCard, SelectedStudent } from "../../types/studentType";
-import { Group } from "../../types/studentType";
-import { cardsStudentsData } from "../../constants/CartStudents";
-import { useAppSelector } from "../../store/hooks";
+import { StudentCard, SelectedStudent } from "../../../types/studentType";
+import { Group } from "../../../types/studentType";
+import { cardsStudentsData } from "../../../constants/cartStudents";
+import { useAppSelector } from "../../../store/hooks";
 import {
   updateSelectedStudents,
   updateStudentCards,
-} from "../../store/slices/studentsSlice";
+} from "../../../store/slices/studentsSlice";
 import { useDispatch } from "react-redux";
 
 function StudentsList() {

@@ -1,11 +1,12 @@
 import React from "react";
-import { SelectedStudent } from "../../types/studentType";
+import { SelectedStudent } from "../../../types/studentType";
 import {
   updateSelectedStudents,
   updateStudentCards,
-} from "../../store/slices/studentsSlice";
+} from "../../../store/slices/studentsSlice";
+import { StudentProps } from "../../../types/studentType";
 
-const Student = ({
+const Student: React.FC<StudentProps> = ({
   student,
   numberClass,
   cardLetter,
@@ -52,8 +53,7 @@ const Student = ({
         />
 
         <span className="checkmark">
-          {student.id}.{student.name}
-          {student.surname}
+          {student.id}.{student.name} {student.surname}
         </span>
       </label>
     </div>

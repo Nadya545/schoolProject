@@ -37,7 +37,7 @@ export interface CardsContainerProps {
   selectedStudents: SelectedStudent[];
   numberSelect: number;
   letterSelect: string;
-  dispatch?: AppDispatch;
+  dispatch: AppDispatch;
   setInputEventName: (value: string) => void;
   setInputEventSurname: (value: string) => void;
   setSelectedStudents?: (students: SelectedStudent[]) => void;
@@ -53,4 +53,25 @@ export interface CardsContainerProps {
   handleLogout: () => void;
   groupCards: (arr: StudentCard[]) => Group;
   groupSortNumber: (arr: Group) => number[];
+}
+export interface CardData {
+  id: number;
+  letter: string;
+  number: number;
+  students: Student[];
+}
+export interface StudentCardProps {
+  index: number;
+  cardData: CardData;
+  handleMoveStudents: (index: number) => void;
+  dispatch: AppDispatch;
+  selectedStudents: SelectedStudent[];
+}
+
+export interface StudentProps {
+  numberClass: number;
+  cardLetter: string;
+  student: Student;
+  selectedStudents: SelectedStudent[];
+  dispatch: AppDispatch;
 }

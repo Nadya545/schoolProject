@@ -3,13 +3,7 @@ import React from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import "./style.scss";
-
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
-  container?: Element | null;
-}
+import { ModalProps } from "./typeModal/typeModal";
 
 export default function Modal({
   isOpen,

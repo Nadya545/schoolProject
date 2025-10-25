@@ -1,11 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { MyRouter } from "./router/MyRouter";
+import { Router } from "./router/Router";
 import { Provider } from "react-redux";
 import { store } from "./store";
 
-const router = createBrowserRouter(MyRouter);
+const router = createBrowserRouter(Router);
 const rootElement = document.getElementById("root");
 
 if (!rootElement) {

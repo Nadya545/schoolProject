@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SelectedStudent, StudentCard } from "../../types/studentType";
-import { cardsStudentsData } from "../../constants/CartStudents";
+import { cardsStudentsData } from "../../constants/cartStudents";
 
 interface StudentState {
   studentCards: StudentCard[];

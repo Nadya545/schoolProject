@@ -6,18 +6,8 @@ import Input from "../input/Input";
 import NumberSelect from "../selects/NumberSelect";
 import LetterSelect from "../selects/LetterSelect";
 import "./style.scss";
+import { AddStudentModalProps } from "./typeModal/typeModal";
 
-interface AddStudentModalProps {
-  inputEventName: string;
-  inputEventSurname: string;
-  numberSelect: number;
-  letterSelect: string;
-  handleSubmit: (e: React.FormEvent) => void;
-  setInputEventName: (value: string) => void;
-  setInputEventSurname: (value: string) => void;
-  setNumberSelect: (value: number) => void;
-  setLetterSelect: (value: string) => void;
-}
 const AddStudentModal = ({
   handleSubmit,
   inputEventName,
