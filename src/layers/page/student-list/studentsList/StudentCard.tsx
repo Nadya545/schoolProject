@@ -3,9 +3,9 @@ import Student from "./Student";
 import {
   SelectedStudent,
   Student as StudentType,
-} from "../../../types/studentType";
-import Button from "../../../ui/button/Button";
-import { StudentCardProps } from "../../../types/studentType";
+} from "../../../../types/studentType";
+import Button from "../../../../ui/button/Button";
+import { StudentCardProps } from "../../../../types/studentType";
 
 const StudentCard: React.FC<StudentCardProps> = ({
   dispatch,

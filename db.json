@@ -1,0 +1,67 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "login": "teacher",
+      "password": "123",
+      "name": "Учитель",
+      "role": "teacher"
+    },
+    {
+      "id": "2",
+      "login": "parent",
+      "password": "123",
+      "name": "Родитель",
+      "role": "parent"
+    },
+    {
+      "id": "3",
+      "login": "student",
+      "password": "123",
+      "name": "Ученик",
+      "role": "student"
+    },
+    {
+      "id": "5337",
+      "login": "Надя",
+      "password": "hgh",
+      "name": "fhfh",
+      "role": "teacher",
+      "subject": [],
+      "classes": [
+        "6А",
+        "4А",
+        "1В",
+        "1Б"
+      ]
+    },
+    {
+      "id": "55ba",
+      "login": "fgf",
+      "password": "fgf",
+      "name": "fhf",
+      "role": "teacher",
+      "subject": [],
+      "classes": [
+        "11А",
+        "11В",
+        "10Б"
+      ]
+    },
+    {
+      "id": "7365",
+      "login": "ghjhj",
+      "password": "ghjghj",
+      "name": "ghjj",
+      "role": "teacher",
+      "subject": "Русский язык",
+      "classes": [
+        "3Б",
+        "8В",
+        "8Б",
+        "8А",
+        "11Б"
+      ]
+    }
+  ]
+}

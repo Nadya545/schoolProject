@@ -1,0 +1,49 @@
+$colorWelcomeAndAuthWithReg: rgb(33, 33, 119);
+$fontFamilyWelcomeAndAuthWithReg: "Lucida Sans", "Lucida Sans Regular",
+  "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+$background: url(https://bronzek.ru/wp-content/uploads/parallax-bg.jpg);
+$mainColorForInpytAndBtn: #4a90e2;
+$borderInput: 2px solid #4a90e2;
+
+.teacher-reg-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color: $colorWelcomeAndAuthWithReg;
+  font-family: $fontFamilyWelcomeAndAuthWithReg;
+  background-image: $background;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  .teacher-reg-title {
+    font-size: 24px;
+  }
+  .teacher-reg-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 40%;
+    .subject {
+      font-family: $fontFamilyWelcomeAndAuthWithReg;
+      height: 40px;
+      padding: 10px 15px;
+      background: white;
+      z-index: 1;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: $borderInput;
+      border-radius: 6px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      color: $colorWelcomeAndAuthWithReg;
+    }
+    .classes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+  }
+}

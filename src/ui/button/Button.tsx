@@ -5,6 +5,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   size?: "close" | "normal" | "addAndOut";
   active?: boolean;
+  onClick?: () => void;
 }
 
 /*const sizeClassMap = {

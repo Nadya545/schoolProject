@@ -1,8 +1,8 @@
 import React from "react";
 import StudentCard from "./StudentCard";
-import { CardData, CardsContainerProps } from "../../../types/studentType";
-import Button from "../../../ui/button/Button";
-import AddStudentModal from "../../../ui/modal/AddStudentModal";
+import { CardData, CardsContainerProps } from "../../../../types/studentType";
+import Button from "../../../../ui/button/Button";
+import AddStudentModal from "../../../../ui/modal/AddStudentModal";
 
 const CardsContainer: React.FC<CardsContainerProps> = ({
   studentCards,

@@ -1,0 +1,28 @@
+$colorWelcomeAndAuthWithReg: rgb(33, 33, 119);
+$fontFamilyWelcomeAndAuthWithReg: "Lucida Sans", "Lucida Sans Regular",
+  "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+$background: url(https://bronzek.ru/wp-content/uploads/parallax-bg.jpg);
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color: $colorWelcomeAndAuthWithReg;
+  font-family: $fontFamilyWelcomeAndAuthWithReg;
+  background-image: $background;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  .auth-title {
+    font-size: 24px;
+  }
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 30%;
+  }
+}

@@ -1,10 +1,10 @@
 import React from "react";
-import { SelectedStudent } from "../../../types/studentType";
+import { SelectedStudent } from "../../../../types/studentType";
 import {
   updateSelectedStudents,
   updateStudentCards,
-} from "../../../store/slices/studentsSlice";
-import { StudentProps } from "../../../types/studentType";
+} from "../../../../store/slices/studentsSlice";
+import { StudentProps } from "../../../../types/studentType";
 
 const Student: React.FC<StudentProps> = ({
   student,
