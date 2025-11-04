@@ -70,7 +70,7 @@ const StudentRegistr = () => {
       newError.surname = "Введите фамилию!";
       isValid = false;
     }
-    if (!formData.class) {
+    if (!formData.class.trim()) {
       newError.class = "Введите номер класса!";
       isValid = false;
     }
@@ -86,6 +86,7 @@ const StudentRegistr = () => {
       return false;
     }
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -173,7 +174,7 @@ const StudentRegistr = () => {
         )}
         <Input
           type="text"
-          name="name"
+          name="class"
           value={formData.class}
           placeholder="Наприме 5А или 10Б"
           onChange={handleInputChange}
