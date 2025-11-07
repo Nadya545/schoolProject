@@ -11,6 +11,7 @@ import ProtectedRoute from "./ProtectedRouter";
 import TeacherRegistr from "../layers/page/registration/teacher/TeacherRegistr";
 import ParentRegistr from "../layers/page/registration/parent/ParentRegistr";
 import StudentRegistr from "../layers/page/registration/student/StudentRegistr";
+import GradesList from "../layers/page/grades/GradesList";
 
 export const Router: RouteObject[] = [
   {
@@ -28,6 +29,14 @@ export const Router: RouteObject[] = [
         element: (
           <ProtectedRoute>
             <StudentsList />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "grades-list",
+        element: (
+          <ProtectedRoute>
+            <GradesList />
           </ProtectedRoute>
         ),
       },

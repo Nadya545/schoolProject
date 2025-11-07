@@ -65,7 +65,7 @@ const Authorisation = () => {
       }
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("token", "user-token-" + user.id);
-      navigate("/class-list");
+      navigate("/");
     } catch (error) {
       setError({
         login: "Ошибка сервера",

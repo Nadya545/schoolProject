@@ -6,7 +6,6 @@ import { handleStudents } from "../../../../hooks/useHandleStudent";
 import { useNavigate } from "react-router-dom";
 import { StudentCard, SelectedStudent } from "../../../../types/studentType";
 import { Group } from "../../../../types/studentType";
-import { cardsStudentsData } from "../../../../constants/cartStudents";
 import { useAppSelector } from "../../../../store/hooks";
 import {
   updateSelectedStudents,

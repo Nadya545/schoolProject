@@ -15,4 +15,12 @@
   &-p {
     font-size: 22px;
   }
+  .opportunities {
+    display: flex;
+    flex-direction: column;
+    nav {
+      display: flex;
+      flex-direction: column;
+    }
+  }
 }

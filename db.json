@@ -22,79 +22,23 @@
       "role": "student"
     },
     {
-      "id": "5337",
-      "login": "Надя",
-      "password": "hgh",
-      "name": "fhfh",
-      "role": "teacher",
-      "subject": [],
-      "classes": [
-        "6А",
-        "4А",
-        "1В",
-        "1Б"
-      ]
-    },
-    {
-      "id": "55ba",
-      "login": "fgf",
-      "password": "fgf",
-      "name": "fhf",
-      "role": "teacher",
-      "subject": [],
-      "classes": [
-        "11А",
-        "11В",
-        "10Б"
-      ]
-    },
-    {
-      "id": "7365",
-      "login": "ghjhj",
-      "password": "ghjghj",
-      "name": "ghjj",
-      "role": "teacher",
-      "subject": "Русский язык",
-      "classes": [
-        "3Б",
-        "8В",
-        "8Б",
-        "8А",
-        "11Б"
-      ]
-    },
-    {
-      "id": "535e",
-      "login": "Учитель",
-      "password": "123",
-      "name": "Маркова Евгения Олеговна",
-      "role": "teacher",
-      "subject": "Математика",
-      "classes": [
-        "6А",
-        "6Б",
-        "6В",
-        "8А",
-        "8В"
-      ]
-    },
-    {
-      "id": "b423",
-      "login": "Родитель",
-      "password": "456",
+      "id": 1762515612708,
+      "login": "надюша",
+      "password": "000",
       "role": "parent",
       "children": [
         1
       ]
     },
     {
-      "id": "5201",
-      "login": "Ваня",
-      "password": "789",
-      "name": "Иван",
-      "surname": "Рощупкин",
-      "role": "student",
-      "class": "5А"
+      "id": "90bf",
+      "login": "ольга",
+      "password": "123",
+      "role": "parent",
+      "children": [
+        2
+      ]
     }
-  ]
+  ],
+  "scores": []
 }
