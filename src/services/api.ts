@@ -1,3 +1,5 @@
+import { StudentCard } from "../types/studentType";
+
 const API_BASE_URL = "http://localhost:3001";
 
 export interface User {
@@ -16,10 +18,10 @@ export interface User {
 }
 
 export interface Score {
-  id: number;
-  studentId: number;
-  teacherId: number;
-  subject: string;
+  id: string;
+  studentId?: number;
+  teacherId?: number;
+  subject?: string;
   class: string; //например 6А
   score: number;
   date: string;
@@ -41,6 +43,7 @@ export const api = {
       throw new Error("Ошибка при создании пользователя");
     }
     const userData = await response.json();
+    console.log("📝 createUser вернул:", userData); // ← добавить
     return userData;
   },
 
@@ -110,7 +113,7 @@ export const api = {
     const scoreData = await response.json();
     return {
       ...scoreData,
-      id: Number(scoreData.id),
+      id: scoreData.id, // ✅ Оставляем как string
       studentId: Number(scoreData.studentId),
       teacherId: Number(scoreData.teacherId),
     };
@@ -126,10 +129,10 @@ export const api = {
     const scores = await response.json();
     const scoresArray = Array.isArray(scores) ? scores : [];
 
-    // Конвертирую все ID в number для каждой оценки:
+    // ✅ Оставляем ID как string
     return scoresArray.map((score) => ({
       ...score,
-      id: Number(score.id),
+      id: score.id, // ✅ string
       studentId: Number(score.studentId),
       teacherId: Number(score.teacherId),
     }));
@@ -151,36 +154,89 @@ export const api = {
     return allScores.flat();
   },
 
-  async getScoreForTeacher(teacherId: number): Promise<Score[]> {
-    const teacher = await fetch(`${API_BASE_URL}/users/${teacherId}`);
+  async getScoreForTeacher(teacherId: number | string): Promise<Score[]> {
+    const teacherIdStr = teacherId.toString();
+    const teacher = await fetch(`${API_BASE_URL}/users/${teacherIdStr}`);
     if (!teacher.ok) {
       throw new Error("Учитель не найден");
     }
     const teacherData = await teacher.json();
+
     const allUsers = await fetch(`${API_BASE_URL}/users`);
     const allUsersData = await allUsers.json();
+    console.log("👥 Все пользователи:", allUsersData);
     const allStudents = allUsersData.filter((user: User) => {
       return user.role === "student";
     });
     const studentsTeacher = allStudents.filter((student: User) => {
-      return teacherData.classes.includes(student.class);
+      const isInClass = teacherData.classes.includes(student.class);
+      return isInClass;
     });
+
     const studentsId = studentsTeacher.map((student: User) => {
       return student.id;
     });
+
     const scoresForEveryStudent = studentsId.map((id: number) => {
       return api.getScoreByStudentId(id);
     });
     const allScoresArr = await Promise.all(scoresForEveryStudent);
     const allScores = allScoresArr.flat();
+
     const teacherScoresForSubject = allScores.filter((score) => {
-      return score.subject === teacherData.subject;
+      const matchesSubject = score.subject === teacherData.subject;
+      return matchesSubject;
     });
+
     return teacherScoresForSubject;
   },
 
+  async getScoreForTeacherFromRedux(
+    teacherId: number | string,
+    studentCards: StudentCard[]
+  ): Promise<Score[]> {
+    try {
+      const teacherResponse = await fetch(`${API_BASE_URL}/users/${teacherId}`);
+      const teacherData = await teacherResponse.json();
+
+      const scoresResponse = await fetch(`${API_BASE_URL}/scores`);
+      const allScores = await scoresResponse.json();
+
+      const teacherStudentIds = studentCards.flatMap((card: StudentCard) => {
+        const cardClassName = `${card.number}${card.letter}`;
+        if (teacherData.classes.includes(cardClassName)) {
+          return card.students.map((student) => student.id);
+        }
+        return [];
+      });
+
+      const teacherScores = allScores.filter((score: Score) => {
+        const scoreThisTeacher = score.teacherId === teacherId;
+        const isForTeachersStudent = teacherStudentIds.includes(
+          Number(score.studentId)
+        );
+        const matchesSubject = score.subject === teacherData.subject;
+        return scoreThisTeacher && isForTeachersStudent && matchesSubject;
+      });
+
+      console.log(`📊 Найдено оценок: ${teacherScores.length}`);
+
+      // ✅ Оставляем ID как string
+      return teacherScores.map((score: any) => ({
+        ...score,
+        id: score.id, // ✅ string
+        studentId: Number(score.studentId),
+        teacherId: Number(score.teacherId),
+        score: Number(score.score),
+      }));
+    } catch (error) {
+      console.error("Ошибка в getScoreForTeacherFromRedux:", error);
+      throw error;
+    }
+  },
+
   async updateScore(
-    scoreId: number,
+    scoreId: string, // ✅ Меняем на string
     updatedData: Partial<Score>
   ): Promise<Score> {
     const findScore = await fetch(`${API_BASE_URL}/scores/${scoreId}`);
@@ -189,7 +245,7 @@ export const api = {
     }
     const findScoreData = await findScore.json();
     const updatedScore = { ...findScoreData, ...updatedData };
-    //отправляю обновленную оценку на сервер
+
     const response = await fetch(`${API_BASE_URL}/scores/${scoreId}`, {
       method: "PUT",
       headers: {
@@ -204,30 +260,36 @@ export const api = {
     const updatedScoreData = await response.json();
     return {
       ...updatedScoreData,
-      id: Number(updatedScoreData.id),
+      id: updatedScoreData.id, // ✅ string
       studentId: Number(updatedScoreData.studentId),
       teacherId: Number(updatedScoreData.teacherId),
     };
   },
 
-  async deleteScore(scoreId: number): Promise<Score> {
+  async deleteScore(scoreId: string): Promise<Score> {
+    // ✅ Меняем на string
+    console.log("🔍 ID для удаления:", scoreId);
+
     const findScore = await fetch(`${API_BASE_URL}/scores/${scoreId}`);
     if (!findScore.ok) {
       throw new Error("Оценка не найдена!");
     }
     const findScoreData = await findScore.json();
+
     const response = await fetch(`${API_BASE_URL}/scores/${scoreId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
     });
+
     if (!response.ok) {
       throw new Error("Ошибка при удалении оценки");
     }
+
     return {
       ...findScoreData,
-      id: Number(findScoreData.id),
+      id: findScoreData.id, // ✅ string
       studentId: Number(findScoreData.studentId),
       teacherId: Number(findScoreData.teacherId),
     };

@@ -12,6 +12,7 @@ import TeacherRegistr from "../layers/page/registration/teacher/TeacherRegistr";
 import ParentRegistr from "../layers/page/registration/parent/ParentRegistr";
 import StudentRegistr from "../layers/page/registration/student/StudentRegistr";
 import GradesList from "../layers/page/grades/GradesList";
+import CreateGradeForm from "../layers/page/grades/CreateGradeForm";
 
 export const Router: RouteObject[] = [
   {
@@ -59,6 +60,10 @@ export const Router: RouteObject[] = [
       {
         path: "registration/student",
         element: <StudentRegistr />,
+      },
+      {
+        path: "create-grade",
+        element: <CreateGradeForm />,
       },
     ],
   },

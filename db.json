@@ -22,7 +22,7 @@
       "role": "student"
     },
     {
-      "id": 1762515612708,
+      "id": "1762515612708",
       "login": "надюша",
       "password": "000",
       "role": "parent",
@@ -38,7 +38,156 @@
       "children": [
         2
       ]
+    },
+    {
+      "id": "cf52",
+      "login": "teacher1",
+      "password": "123",
+      "name": "Надежда Витальевна Поветкина",
+      "role": "teacher",
+      "subject": "Математика",
+      "classes": [
+        "5Б",
+        "5В",
+        "5А",
+        "6Б",
+        "7Б"
+      ]
+    },
+    {
+      "id": "60e6",
+      "login": "teacher2",
+      "password": "1234",
+      "name": "Николай Петрович Пупкин",
+      "role": "teacher",
+      "subject": "Физика",
+      "classes": [
+        "6Б",
+        "6В"
+      ]
+    },
+    {
+      "id": "2448",
+      "login": "teacher3",
+      "password": "12345",
+      "name": "Аля Кирилловна Мишина",
+      "role": "teacher",
+      "subject": "Химия",
+      "classes": [
+        "6Б"
+      ]
     }
   ],
-  "scores": []
+  "scores": [
+    {
+      "id": "1016",
+      "class": "6Б",
+      "studentId": 13,
+      "teacherId": null,
+      "subject": "Математика",
+      "score": "4",
+      "type": "урок",
+      "comment": "хорошо",
+      "date": "2025-11-12"
+    },
+    {
+      "id": "8a87",
+      "class": "6Б",
+      "studentId": 14,
+      "teacherId": null,
+      "subject": "Математика",
+      "score": "4",
+      "type": "урок",
+      "comment": "хорошо",
+      "date": "2025-11-12"
+    },
+    {
+      "id": "fac6",
+      "class": "6Б",
+      "studentId": 13,
+      "teacherId": null,
+      "subject": "Математика",
+      "score": "4",
+      "type": "урок",
+      "comment": "хорошо",
+      "date": "2025-11-12"
+    },
+    {
+      "id": "91d7",
+      "class": "6Б",
+      "studentId": 13,
+      "teacherId": null,
+      "subject": "Математика",
+      "score": "4",
+      "type": "урок",
+      "comment": "хорошо",
+      "date": "2025-11-12"
+    },
+    {
+      "id": "ba70",
+      "class": "6Б",
+      "studentId": 13,
+      "teacherId": null,
+      "subject": "Математика",
+      "score": "4",
+      "type": "урок",
+      "comment": "хорошо",
+      "date": "2025-11-12"
+    },
+    {
+      "id": "7fe3",
+      "class": "6Б",
+      "studentId": 13,
+      "teacherId": null,
+      "subject": "Математика",
+      "score": "4",
+      "type": "урок",
+      "comment": "хорошо",
+      "date": "2025-11-12"
+    },
+    {
+      "id": "eca6",
+      "class": "6Б",
+      "studentId": 13,
+      "teacherId": null,
+      "subject": "Математика",
+      "score": "4",
+      "type": "урок",
+      "comment": "хорошо",
+      "date": "2025-11-12"
+    },
+    {
+      "id": "e5dc",
+      "class": "6Б",
+      "studentId": 13,
+      "teacherId": 2448,
+      "subject": "Химия",
+      "score": "4",
+      "type": "урок",
+      "comment": "хорошо",
+      "date": "2025-11-12"
+    },
+    {
+      "id": "1e88",
+      "class": "6Б",
+      "studentId": 13,
+      "teacherId": 2448,
+      "subject": "Химия",
+      "score": "4",
+      "type": "урок",
+      "comment": "хорошо",
+      "date": "2025-11-12"
+    },
+    {
+      "id": "b6dc",
+      "class": "6Б",
+      "studentId": 14,
+      "teacherId": 2448,
+      "subject": "Химия",
+      "score": "5",
+      "type": "урок",
+      "comment": "отлично",
+      "date": "2025-11-14"
+    }
+  ]
 }
