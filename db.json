@@ -76,6 +76,78 @@
       "classes": [
         "6Б"
       ]
+    },
+    {
+      "id": "e828",
+      "login": "родитель1",
+      "password": "123",
+      "role": "parent",
+      "children": [
+        5,
+        14
+      ]
+    },
+    {
+      "id": "0ad9",
+      "login": "родитель2",
+      "password": "1234",
+      "role": "parent",
+      "children": [
+        13,
+        6
+      ]
+    },
+    {
+      "id": "cb81",
+      "login": "student1",
+      "password": "12345",
+      "name": "Митрофан",
+      "surname": "Виноградов",
+      "role": "student",
+      "class": "7А"
+    },
+    {
+      "id": "792b",
+      "login": "teacher4",
+      "password": "12345",
+      "name": "Александрова Ольга Владимировна",
+      "role": "teacher",
+      "subject": "Литература",
+      "classes": [
+        "7А",
+        "7Б",
+        "7В",
+        "4А",
+        "4Б",
+        "4В"
+      ]
+    },
+    {
+      "id": "1db0",
+      "login": "student2",
+      "password": "12345",
+      "name": "Павел",
+      "surname": "Плюшкин",
+      "role": "student",
+      "class": "7"
+    },
+    {
+      "id": "4350",
+      "login": "teststudent7a",
+      "password": "12345",
+      "name": "Тест",
+      "surname": "Студент",
+      "role": "student",
+      "class": "7А"
+    },
+    {
+      "id": "2266",
+      "login": "student3",
+      "password": "12345",
+      "name": "Надя",
+      "surname": "Островянская",
+      "role": "student",
+      "class": "7А"
     }
   ],
   "scores": [
@@ -162,9 +234,9 @@
       "studentId": 13,
       "teacherId": 2448,
       "subject": "Химия",
-      "score": "4",
-      "type": "урок",
-      "comment": "хорошо",
+      "score": 5,
+      "type": "урок (пересдача)",
+      "comment": "отлично",
       "date": "2025-11-12"
     },
     {
@@ -188,6 +260,61 @@
       "type": "урок",
       "comment": "отлично",
       "date": "2025-11-14"
+    },
+    {
+      "id": "dac5",
+      "class": "6Б",
+      "studentId": 14,
+      "teacherId": 2448,
+      "subject": "Химия",
+      "score": "3",
+      "type": "урок",
+      "comment": "самостоятельная работа",
+      "date": "2025-11-17"
+    },
+    {
+      "id": "fc45",
+      "class": "7А",
+      "studentId": "16",
+      "teacherId": "792b",
+      "subject": "Литература",
+      "score": "4",
+      "type": "урок",
+      "comment": "хорошо",
+      "date": "2025-11-18"
+    },
+    {
+      "id": "test-mitrofan-1",
+      "class": "7А",
+      "studentId": "cb81",
+      "teacherId": "792b",
+      "subject": "Литература",
+      "score": 5,
+      "type": "домашняя работа",
+      "comment": "Отличная работа!",
+      "date": "2024-01-15"
+    },
+    {
+      "id": "0b12",
+      "class": "7А",
+      "studentId": "4350",
+      "teacherId": "792b",
+      "subject": "Литература",
+      "score": 5,
+      "type": "урок",
+      "comment": "отлично",
+      "date": "2025-11-18"
+    },
+    {
+      "id": "ee9f",
+      "class": "7А",
+      "studentId": "2266",
+      "teacherId": "792b",
+      "subject": "Литература",
+      "score": "4",
+      "type": "урок",
+      "comment": "хорошо",
+      "date": "2025-11-18"
     }
   ]
 }

@@ -11,8 +11,6 @@ export default function Modal({
   children,
   container,
 }: ModalProps) {
-  console.log("Modal component - isOpen:", isOpen);
-
   const modalContent = (
     <AnimatePresence>
       {isOpen && (

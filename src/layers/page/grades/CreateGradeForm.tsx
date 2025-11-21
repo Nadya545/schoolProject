@@ -6,6 +6,7 @@ import Button from "../../../ui/button/Button";
 import Input from "../../../ui/input/Input";
 import { api } from "../../../services/api";
 import { useNavigate } from "react-router-dom";
+import { apiForScore } from "../../../services/apiForScore";
 
 const CreateGradeForm = () => {
   const { getCurrentUser } = useGetUser();
@@ -15,8 +16,8 @@ const CreateGradeForm = () => {
 
   interface NewGrade {
     class: string;
-    studentId: number;
-    teacherId: number;
+    studentId: string;
+    teacherId: string;
     score: number;
     type: string;
     comment: string;
@@ -25,8 +26,8 @@ const CreateGradeForm = () => {
 
   const [formData, setFormData] = useState<NewGrade>({
     class: "",
-    studentId: 0,
-    teacherId: 0,
+    studentId: "",
+    teacherId: "",
     score: 0,
     type: "",
     comment: "",
@@ -52,7 +53,7 @@ const CreateGradeForm = () => {
         return {
           ...prev,
           class: "",
-          studentId: 0,
+          studentId: "",
         };
       } else {
         try {
@@ -82,7 +83,7 @@ const CreateGradeForm = () => {
     });
   };
   const handleStudent = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const studentId = Number(e.target.value);
+    const studentId = e.target.value;
     setFormData((prev) => ({
       ...prev,
       studentId: studentId,
@@ -159,7 +160,7 @@ const CreateGradeForm = () => {
         comment: formData.comment,
         date: new Date().toISOString().split("T")[0],
       };
-      const result = await api.createScore(newGrade);
+      const result = await apiForScore.createScore(newGrade);
       console.log("✅ Оценка создана:", result);
       navigate("/grades-list");
     } catch (error) {

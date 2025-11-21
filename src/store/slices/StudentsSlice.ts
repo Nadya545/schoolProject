@@ -22,7 +22,7 @@ const studentsSlice = createSlice({
       state.selectedStudents = action.payload;
     },
     addStudent: (state, action) => {
-      const { name, surname, class: studentClass } = action.payload;
+      const { name, surname, class: studentClass, id } = action.payload;
 
       const number = parseInt(studentClass);
       const letter = studentClass.replace(number.toString(), "");
@@ -31,31 +31,23 @@ const studentsSlice = createSlice({
         (card) => card.number === number && card.letter === letter
       );
 
-      const getIdStudent = () => {
-        const idStudents = state.studentCards.flatMap((card) => {
-          return card.students;
-        });
-
-        const returnId = idStudents.map((el) => {
-          return el.id;
-        });
-
-        const idsArr = returnId;
-        if (idsArr.length !== 0) {
-          const maxId = Math.max(...idsArr);
-          const newId = maxId + 1;
-          return newId;
-        } else {
-          return 1;
-        }
-      };
-      const newId = getIdStudent();
       const capitalize = (str: string) =>
         str.charAt(0).toUpperCase() + str.slice(1);
 
+      // Проверка на дубликаты
+      const allStudents = state.studentCards.flatMap((card) => card.students);
+      const existingStudent = allStudents.find(
+        (student) => student.id.toString() === id.toString()
+      );
+
+      if (existingStudent) {
+        console.warn("Студент с таким ID уже существует:", id);
+        return;
+      }
+
       if (existingCard) {
         const newStudent = {
-          id: newId,
+          id: id,
           name: capitalize(name),
           surname: capitalize(surname),
         };
@@ -66,7 +58,7 @@ const studentsSlice = createSlice({
           number,
           letter,
           students: [
-            { id: newId, name: capitalize(name), surname: capitalize(surname) },
+            { id: id, name: capitalize(name), surname: capitalize(surname) },
           ],
         };
         state.studentCards.push(newCard);
@@ -74,7 +66,6 @@ const studentsSlice = createSlice({
     },
   },
 });
-
 export const { updateStudentCards, updateSelectedStudents, addStudent } =
   studentsSlice.actions;
 

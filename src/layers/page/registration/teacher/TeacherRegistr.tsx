@@ -82,7 +82,7 @@ const TeacherRegistr = () => {
       isValid = false;
     }
     if (!formData.subject) {
-      newError.password = "Выберете предмет!";
+      newError.subject = "Выберете предмет!";
       isValid = false;
     }
 
@@ -123,7 +123,10 @@ const TeacherRegistr = () => {
         subject: formData.subject,
         classes: formData.classes,
       };
-      await api.createUser(newTeacher);
+      console.log("📝 Создаем пользователя:", newTeacher);
+      const createdUser = await api.createUser(newTeacher);
+      console.log("✅ Пользователь создан:", createdUser);
+
       navigate("/authorisation");
     } catch (error) {
       setError((prev) => ({

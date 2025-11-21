@@ -106,13 +106,15 @@ const StudentRegistr = () => {
         role: "student" as const,
         class: formData.class,
       };
-      await api.createUser(newStudent);
+
+      const createdUser = await api.createUser(newStudent);
 
       dispatch(
         addStudent({
           name: formData.name,
           surname: formData.surname,
           class: formData.class,
+          id: createdUser.id,
         })
       );
 
