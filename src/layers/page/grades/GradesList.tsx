@@ -19,6 +19,10 @@ const GradesList = () => {
   );
   console.log("🎯 3. Redux state получен:", studentCardsRedux);
 
+  const [grades, setGrades] = useState<Score[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
   const syncStudentsFromDatabase = async () => {
     try {
       console.log("🔄 Синхронизация студентов из базы данных...");
@@ -27,9 +31,17 @@ const GradesList = () => {
       const usersResponse = await fetch("http://localhost:3001/users");
       const allUsers = await usersResponse.json();
 
+      console.log("🔍 ALL USERS FROM DATABASE:", allUsers);
+
       // Отфильтровать только студентов
       const students = allUsers.filter((user: any) => user.role === "student");
-      console.log("👥 Студенты из базы:", students);
+      console.log("👥 FILTERED STUDENTS:", students);
+
+      // Проверим, есть ли студент с ID 13
+      const studentWithId13 = students.find(
+        (s: any) => s.id == 13 || s.id == "13"
+      );
+      console.log("🎯 STUDENT WITH ID 13:", studentWithId13);
 
       // Создать структуру классов для Redux
       const classesMap = new Map();
@@ -60,7 +72,7 @@ const GradesList = () => {
       });
 
       const studentCards = Array.from(classesMap.values());
-      console.log("📚 Обновленные studentCards для Redux:", studentCards);
+      console.log("📚 FINAL STUDENT CARDS FOR REDUX:", studentCards);
 
       // Обновить Redux
       dispatch(updateStudentCards(studentCards));
@@ -87,9 +99,6 @@ const GradesList = () => {
   }
 
   console.log("🎯 7. Пользователь найден, инициализируем state");
-  const [grades, setGrades] = useState<Score[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
 
   console.log("🎯 8. State инициализирован");
 

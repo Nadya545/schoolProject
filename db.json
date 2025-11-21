@@ -148,6 +148,114 @@
       "surname": "Островянская",
       "role": "student",
       "class": "7А"
+    },
+    {
+      "id": "4",
+      "login": "student4",
+      "password": "123",
+      "name": "Василий",
+      "surname": "Иванов",
+      "role": "student",
+      "class": "3Б"
+    },
+    {
+      "id": "5",
+      "login": "student5",
+      "password": "123",
+      "name": "Кирилл",
+      "surname": "Петров",
+      "role": "student",
+      "class": "3Б"
+    },
+    {
+      "id": "6",
+      "login": "student6",
+      "password": "123",
+      "name": "Лариса",
+      "surname": "Никифоровна",
+      "role": "student",
+      "class": "3Б"
+    },
+    {
+      "id": "7",
+      "login": "student7",
+      "password": "123",
+      "name": "Егор",
+      "surname": "Клейменов",
+      "role": "student",
+      "class": "10А"
+    },
+    {
+      "id": "8",
+      "login": "student8",
+      "password": "123",
+      "name": "Арина",
+      "surname": "Светлакова",
+      "role": "student",
+      "class": "10А"
+    },
+    {
+      "id": "9",
+      "login": "student9",
+      "password": "123",
+      "name": "Богдан",
+      "surname": "Нежин",
+      "role": "student",
+      "class": "10А"
+    },
+    {
+      "id": "10",
+      "login": "student10",
+      "password": "123",
+      "name": "Марина",
+      "surname": "Кондурова",
+      "role": "student",
+      "class": "10Б"
+    },
+    {
+      "id": "11",
+      "login": "student11",
+      "password": "123",
+      "name": "Павел",
+      "surname": "Дуров",
+      "role": "student",
+      "class": "10Б"
+    },
+    {
+      "id": "12",
+      "login": "student12",
+      "password": "123",
+      "name": "Надежда",
+      "surname": "Островянская",
+      "role": "student",
+      "class": "10Б"
+    },
+    {
+      "id": "13",
+      "login": "student13",
+      "password": "123",
+      "name": "Даша",
+      "surname": "Конурова",
+      "role": "student",
+      "class": "6Б"
+    },
+    {
+      "id": "14",
+      "login": "student14",
+      "password": "123",
+      "name": "Олег",
+      "surname": "Помазнев",
+      "role": "student",
+      "class": "6Б"
+    },
+    {
+      "id": "15",
+      "login": "student15",
+      "password": "123",
+      "name": "Ирина",
+      "surname": "Перелепская",
+      "role": "student",
+      "class": "6Б"
     }
   ],
   "scores": [
@@ -315,6 +423,17 @@
       "type": "урок",
       "comment": "хорошо",
       "date": "2025-11-18"
+    },
+    {
+      "id": "19c4",
+      "class": "6Б",
+      "studentId": "15",
+      "teacherId": "cf52",
+      "subject": "Математика",
+      "score": "5",
+      "type": "урок (пересдача)",
+      "comment": "отлично",
+      "date": "2025-11-21"
     }
   ]
 }

@@ -21,6 +21,42 @@ const studentsSlice = createSlice({
     updateSelectedStudents: (state, action) => {
       state.selectedStudents = action.payload;
     },
+    mergeStudentCards: (state, action) => {
+      const dbStudentCards = action.payload;
+
+      // Объединяем студентов из константы и БД
+      const mergedCards = new Map();
+
+      // Добавляем карточки из константы
+      cardsStudentsData.forEach((card) => {
+        const key = `${card.number}-${card.letter}`;
+        mergedCards.set(key, { ...card });
+      });
+
+      // Добавляем/объединяем карточки из БД
+      dbStudentCards.forEach((dbCard: StudentCard) => {
+        const key = `${dbCard.number}-${dbCard.letter}`;
+
+        if (mergedCards.has(key)) {
+          // Если класс уже есть, добавляем студентов (исключая дубликаты)
+          const existingCard = mergedCards.get(key);
+          const existingStudentIds = new Set(
+            existingCard.students.map((s) => s.id)
+          );
+
+          dbCard.students.forEach((student) => {
+            if (!existingStudentIds.has(student.id)) {
+              existingCard.students.push(student);
+            }
+          });
+        } else {
+          // Если класса нет, добавляем новую карточку
+          mergedCards.set(key, { ...dbCard });
+        }
+      });
+
+      state.studentCards = Array.from(mergedCards.values());
+    },
     addStudent: (state, action) => {
       const { name, surname, class: studentClass, id } = action.payload;
 
@@ -54,7 +90,7 @@ const studentsSlice = createSlice({
         existingCard.students.push(newStudent);
       } else {
         const newCard: StudentCard = {
-          id: Date.now(),
+          id,
           number,
           letter,
           students: [
@@ -66,7 +102,11 @@ const studentsSlice = createSlice({
     },
   },
 });
-export const { updateStudentCards, updateSelectedStudents, addStudent } =
-  studentsSlice.actions;
+export const {
+  updateStudentCards,
+  updateSelectedStudents,
+  mergeStudentCards,
+  addStudent,
+} = studentsSlice.actions;
 
 export default studentsSlice.reducer;

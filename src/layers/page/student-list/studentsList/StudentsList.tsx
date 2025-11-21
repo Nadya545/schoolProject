@@ -1,17 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "../../../../App.scss";
 import CardsContainer from "./CardsContainer";
-import { handleStudents } from "../../../../hooks/useHandleStudent";
+import { handleStudents } from "../useHandleStudent";
 import { useNavigate } from "react-router-dom";
-import { StudentCard, SelectedStudent } from "../../../../types/studentType";
+import {
+  StudentCard,
+  SelectedStudent,
+  Student,
+} from "../../../../types/studentType";
 import { Group } from "../../../../types/studentType";
 import { useAppSelector } from "../../../../store/hooks";
 import {
   updateSelectedStudents,
   updateStudentCards,
+  mergeStudentCards,
 } from "../../../../store/slices/studentsSlice";
 import { useDispatch } from "react-redux";
+import { loadStudentsFromDB } from "../useLoadStudentsFromBd";
 
 function StudentsList() {
   const dispatch = useDispatch();
@@ -21,6 +27,12 @@ function StudentsList() {
   );
 
   const navigate = useNavigate();
+
+  // Загружаем студентов из БД при загрузке компонента
+  useEffect(() => {
+    loadStudentsFromDB(dispatch, studentCards);
+  }, []); // ← ДОБАВЬТЕ этот useEffect
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -56,24 +68,20 @@ function StudentsList() {
   const [inputEventSurname, setInputEventSurname] = useState("");
   const [numberSelect, setNumberSelect] = useState<number>(0);
   const [letterSelect, setLetterSelect] = useState("");
-  /* const [studentCards, setStudentCards] = useState(cardsStudents); redux */
-  /*const [selectedStudents, setSelectedStudents] = useState<SelectedStudent[]>(
-    []
-  ); //массив обьектов redux*/
 
   const { handleMoveStudentsById, createNewStudents } = handleStudents(
     studentCards,
     (newCards) => dispatch(updateStudentCards(newCards))
   );
 
-  const handleClickBtn = (
+  const handleClickBtn = async (
     inputEventName: string,
     inputEventSurname: string,
     numberSelect: number,
     letterSelect: string
   ) => {
     if (!numberSelect) {
-      ("Выберете номер класса!");
+      alert("Выберете номер класса!");
       return;
     }
     const numberSelectAsNumber = Number(numberSelect);
@@ -81,7 +89,7 @@ function StudentsList() {
     console.log("inputEventSurname перед вызовом:", inputEventSurname);
     console.log("numberSelect перед вызовом:", numberSelect);
     console.log("letterSelect перед вызовом:", letterSelect);
-    createNewStudents(
+    await createNewStudents(
       inputEventName,
       inputEventSurname,
       numberSelectAsNumber,

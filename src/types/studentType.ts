@@ -1,19 +1,19 @@
 import { AppDispatch } from "../store";
 
 export interface Student {
-  id: number;
+  id: string;
   name: string;
   surname: string;
 }
 
 export interface SelectedStudent {
-  id: number;
+  id: string;
   number: number;
   letter: string;
 }
 
 export interface StudentCard {
-  id: number;
+  id: string;
   letter: string;
   number: number;
   students: Student[];
@@ -55,7 +55,7 @@ export interface CardsContainerProps {
   groupSortNumber: (arr: Group) => number[];
 }
 export interface CardData {
-  id: number;
+  id: string;
   letter: string;
   number: number;
   students: Student[];

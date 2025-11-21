@@ -20,17 +20,73 @@ const GradeItem: React.FC<GradeItemProps> = ({
   loadGrades,
 }) => {
   const studentCards = useAppSelector((state) => state.students.studentCards);
-  const student = studentCards
-    .flatMap((card) => card.students)
-    .find((s) => s.id.toString() === grade.studentId);
 
-  const myChildrenStudents = studentCards.flatMap((card) => {
-    return card.students.filter((student) => children?.includes(student.id));
+  // ДОБАВЬТЕ ЭТОТ ВЫВОД ДЛЯ ДИАГНОСТИКИ
+  const allStudents = React.useMemo(() => {
+    const students = studentCards.flatMap((card) => card.students);
+    console.log(
+      "🔍 ALL STUDENTS WITH IDs:",
+      students.map((s) => ({ id: s.id, type: typeof s.id, name: s.name }))
+    );
+    return students;
+  }, [studentCards]);
+
+  // ИСПРАВЛЕННЫЙ поиск - сравниваем как строки
+  const student = React.useMemo(() => {
+    return allStudents.find((s) => {
+      // Приводим оба ID к строке для надежного сравнения
+      const studentIdStr = String(s.id);
+      const gradeStudentIdStr = String(grade.studentId);
+      console.log(
+        "🔍 COMPARING AS STRINGS:",
+        studentIdStr,
+        "===",
+        gradeStudentIdStr
+      );
+      return studentIdStr === gradeStudentIdStr;
+    });
+  }, [allStudents, grade.studentId]);
+
+  // ИСПРАВЛЕННЫЙ поиск для родителя
+  const currentChild = React.useMemo(() => {
+    if (!student || !children) return null;
+
+    // Приводим ID студента к числу и проверяем в массиве children
+    const studentIdNum = Number(student.id);
+    // Если не получается преобразовать в число, ищем как строку
+    if (isNaN(studentIdNum)) {
+      return children.includes(Number(student.id)) ? student : null;
+    }
+    return children.includes(studentIdNum) ? student : null;
+  }, [student, children]);
+
+  console.log("🎯 FINAL RESULT - student:", student);
+  console.log("🎯 FINAL RESULT - currentChild:", currentChild);
+
+  console.log("🔍 ALL STUDENTS:", allStudents);
+  console.log("🔍 SEARCHING FOR STUDENT ID:", grade.studentId);
+
+  // Отладочная информация
+  console.log("📊 GradeItem debug:", {
+    studentCards,
+    student,
+    currentChild,
+    gradeStudentId: grade.studentId,
+    children,
   });
-  const currentChild = myChildrenStudents.find((child) => {
-    if (!grade.studentId) return false;
-    return child.id === Number(grade.studentId);
-  });
+
+  const renderStudentName = () => {
+    if (student) {
+      return `${student.name} ${student.surname}`;
+    }
+    return `Студент ID: ${grade.studentId}`;
+  };
+  const renderParentStudentName = () => {
+    if (currentChild) {
+      return `${currentChild.name} ${currentChild.surname}`;
+    }
+    return `Ребенок ID: ${grade.studentId}`;
+  };
 
   const deleteScore = async () => {
     const isConfirmed = window.confirm(
@@ -56,10 +112,8 @@ const GradeItem: React.FC<GradeItemProps> = ({
 
   return (
     <div className="grade-item">
-      {role === "parent" && currentChild && (
-        <div className="gradesForParent">
-          {currentChild.name} {currentChild.surname}
-        </div>
+      {role === "parent" && (
+        <div className="gradesForParent">{renderParentStudentName()}</div>
       )}
       {role === "teacher" && (
         <>
@@ -73,10 +127,7 @@ const GradeItem: React.FC<GradeItemProps> = ({
       <div className="gradesForEveryone">
         <div>{new Date(grade.date).toLocaleDateString()}</div>
 
-        <div>
-          {" "}
-          👨‍🎓{student?.name} {student?.surname}
-        </div>
+        <div> 👨‍🎓{renderStudentName()}</div>
 
         <div>📚 {grade.subject}</div>
         <div>⭐ {grade.score}</div>
