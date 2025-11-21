@@ -256,6 +256,38 @@
       "surname": "Перелепская",
       "role": "student",
       "class": "6Б"
+    },
+    {
+      "id": "student4351",
+      "login": "student4351",
+      "password": "123",
+      "name": "Егор",
+      "surname": "Крид",
+      "role": "student",
+      "class": "9А"
+    },
+    {
+      "id": "fe9c",
+      "login": "Учитель Егора Крида",
+      "password": "12345",
+      "name": "Пономарь Татьяна Васильевна",
+      "role": "teacher",
+      "subject": "Физкультура",
+      "classes": [
+        "9А",
+        "9Б",
+        "9В",
+        "6Б"
+      ]
+    },
+    {
+      "id": "student4352",
+      "login": "student4352",
+      "password": "123",
+      "name": "Ольга",
+      "surname": "Бузова",
+      "role": "student",
+      "class": "6Б"
     }
   ],
   "scores": [
@@ -433,6 +465,17 @@
       "score": "5",
       "type": "урок (пересдача)",
       "comment": "отлично",
+      "date": "2025-11-21"
+    },
+    {
+      "id": "2fb4",
+      "class": "9А",
+      "studentId": "student4351",
+      "teacherId": "fe9c",
+      "subject": "Физкультура",
+      "score": "3",
+      "type": "урок",
+      "comment": "я",
       "date": "2025-11-21"
     }
   ]

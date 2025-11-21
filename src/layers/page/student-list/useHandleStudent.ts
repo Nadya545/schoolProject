@@ -15,7 +15,9 @@ export const handleStudents = (
     num: number,
     lett: string
   ) => {
-    console.log("Параметры:", { str1, str2, num, lett });
+    console.log("=== НАЧАЛО createNewStudents ===");
+    console.log("📝 Параметры функции:", { str1, str2, num, lett });
+
     if (!str1 || (str1.trim() === "" && !str2) || str2.trim() === "") {
       alert("Введите данные ученика!");
       return;
@@ -23,14 +25,21 @@ export const handleStudents = (
 
     const newNum = Number(num);
     const newLetter = lett.toUpperCase();
+    console.log("🔢 Преобразованные параметры:", { newNum, newLetter });
 
     const getIdStudent = async () => {
       try {
+        console.log("🆔 Начало генерации ID...");
         const response = await fetch("http://localhost:3001/users");
+        console.log("📡 Получен ответ от /users, статус:", response.status);
+
         const allUsers = await response.json();
+        console.log("👥 Всего пользователей:", allUsers.length);
+
         const students = allUsers.filter(
           (user: any) => user.role === "student"
         );
+        console.log("🎓 Найдено студентов:", students.length);
 
         // Генерируем строковый ID в формате "studentXX"
         const numericIds = students
@@ -41,13 +50,20 @@ export const handleStudents = (
           })
           .filter((id) => id > 0);
 
+        console.log("🔢 Числовые ID студентов:", numericIds);
+
         // Начинаем с 16, так как 1-15 уже заняты
         const nextId = numericIds.length > 0 ? Math.max(...numericIds) + 1 : 16;
-        return `student${nextId}`;
+        const generatedId = `student${nextId}`;
+
+        console.log("🎯 Сгенерированный ID:", generatedId);
+        return generatedId;
       } catch (error) {
-        console.error("Ошибка получения ID:", error);
+        console.error("❌ Ошибка получения ID:", error);
         // Fallback - генерируем случайный ID
-        return `student${Date.now()}`;
+        const fallbackId = `student${Date.now()}`;
+        console.log("🔄 Используем fallback ID:", fallbackId);
+        return fallbackId;
       }
     };
 
@@ -62,29 +78,56 @@ export const handleStudents = (
       surname: capitalize(str2),
     };
 
+    console.log("👤 Данные студента для Redux:", newStudent);
+
     try {
-      await fetch("http://localhost:3001/users", {
+      const studentData = {
+        id: newId,
+        login: newId, // Используем тот же ID как логин
+        password: "123",
+        name: capitalize(str1),
+        surname: capitalize(str2),
+        role: "student",
+        class: `${num}${lett.toUpperCase()}`,
+      };
+
+      console.log("📤 Отправка данных в БД:", studentData);
+      console.log("🌐 URL запроса: http://localhost:3001/users");
+
+      const response = await fetch("http://localhost:3001/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          id: newId,
-          login: newId, // Используем тот же ID как логин
-          password: "123",
-          name: capitalize(str1),
-          surname: capitalize(str2),
-          role: "student",
-          class: `${num}${lett.toUpperCase()}`,
-        }),
+        body: JSON.stringify(studentData),
       });
-      console.log("✅ Студент сохранен в базу данных");
+
+      console.log("📥 Ответ от сервера:", {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("❌ Ошибка HTTP:", {
+          status: response.status,
+          errorText: errorText,
+        });
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const savedStudent = await response.json();
+      console.log("✅ Студент успешно сохранен в БД:", savedStudent);
+      console.log("🎉 ID сохраненного студента:", savedStudent.id);
     } catch (error) {
-      console.error("❌ Ошибка сохранения студента в БД:", error);
+      console.error("❌ Критическая ошибка сохранения студента в БД:", error);
       alert("Ошибка при создании студента!");
       return;
     }
 
+    console.log("=== ПРОДОЛЖЕНИЕ createNewStudents ===");
+    // ... остальной код
     const existingCardIndex = studentCards.findIndex((card) => {
       return card.number === newNum && card.letter === newLetter;
     });
