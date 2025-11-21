@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useGetUser } from "../../../hooks/useGetUser";
-import { api } from "../../../services/api";
 import { Score, apiForScore } from "../../../services/apiForScore";
 import { useNavigate } from "react-router-dom";
 import Button from "../../../ui/button/Button";
@@ -14,7 +13,7 @@ const GradesList = () => {
   const navigate = useNavigate();
   console.log("🎯 2. useNavigate отработал");
 
-  const dispatch = useAppDispatch(); // Добавьте эту строку
+  const dispatch = useAppDispatch();
   const studentCardsRedux = useAppSelector(
     (state) => state.students.studentCards
   );
@@ -70,11 +69,6 @@ const GradesList = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("🔄 Запуск синхронизации студентов...");
-    syncStudentsFromDatabase();
-  }, []);
-
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -126,8 +120,11 @@ const GradesList = () => {
   };
 
   useEffect(() => {
-    console.log("⚡ 14. useEffect сработал, вызываем loadGrades");
-    loadGrades();
+    const loadData = async () => {
+      await syncStudentsFromDatabase();
+      await loadGrades();
+    };
+    loadData();
   }, []);
 
   console.log("🎨 15. Рендерим JSX компонента");
