@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SelectedStudent, StudentCard } from "../../types/studentType";
 import { cardsStudentsData } from "../../constants/cartStudents";
 
@@ -6,6 +6,7 @@ interface StudentState {
   studentCards: StudentCard[];
   selectedStudents: SelectedStudent[];
 }
+
 const initialState: StudentState = {
   studentCards: cardsStudentsData,
   selectedStudents: [],
@@ -15,57 +16,40 @@ const studentsSlice = createSlice({
   name: "students",
   initialState,
   reducers: {
-    updateStudentCards: (state, action) => {
+    updateStudentCards: (state, action: PayloadAction<StudentCard[]>) => {
       state.studentCards = action.payload;
     },
-    updateSelectedStudents: (state, action) => {
+
+    updateSelectedStudents: (
+      state,
+      action: PayloadAction<SelectedStudent[]>
+    ) => {
       state.selectedStudents = action.payload;
     },
-    mergeStudentCards: (state, action) => {
-      const dbStudentCards = action.payload;
 
-      // Объединяем студентов из константы и БД
-      const mergedCards = new Map();
-
-      // Добавляем карточки из константы
-      cardsStudentsData.forEach((card) => {
-        const key = `${card.number}-${card.letter}`;
-        mergedCards.set(key, { ...card });
-      });
-
-      // Добавляем/объединяем карточки из БД
-      dbStudentCards.forEach((dbCard: StudentCard) => {
-        const key = `${dbCard.number}-${dbCard.letter}`;
-
-        if (mergedCards.has(key)) {
-          // Если класс уже есть, добавляем студентов (исключая дубликаты)
-          const existingCard = mergedCards.get(key);
-          const existingStudentIds = new Set(
-            existingCard.students.map((s) => s.id)
-          );
-
-          dbCard.students.forEach((student) => {
-            if (!existingStudentIds.has(student.id)) {
-              existingCard.students.push(student);
-            }
-          });
-        } else {
-          // Если класса нет, добавляем новую карточку
-          mergedCards.set(key, { ...dbCard });
-        }
-      });
-
-      state.studentCards = Array.from(mergedCards.values());
-    },
-    addStudent: (state, action) => {
-      const { name, surname, class: studentClass, id } = action.payload;
-
+    // 🔄 ОБНОВЛЕННЫЙ: Добавляет студента и возвращает данные для БД
+    addStudent: (
+      state,
+      action: PayloadAction<{
+        name: string;
+        surname: string;
+        class: string;
+        onStudentAdded?: (studentData: any) => void; // Колбэк для создания в БД
+      }>
+    ) => {
+      const {
+        name,
+        surname,
+        class: studentClass,
+        onStudentAdded,
+      } = action.payload;
       const number = parseInt(studentClass);
       const letter = studentClass.replace(number.toString(), "");
 
-      const existingCard = state.studentCards.find(
-        (card) => card.number === number && card.letter === letter
-      );
+      // Генерируем ID и логин/пароль
+      const id = Date.now().toString();
+      const login = `${name.toLowerCase()}${surname.toLowerCase()}${number}${letter}`;
+      const password = "12345"; // Стандартный пароль
 
       const capitalize = (str: string) =>
         str.charAt(0).toUpperCase() + str.slice(1);
@@ -73,40 +57,58 @@ const studentsSlice = createSlice({
       // Проверка на дубликаты
       const allStudents = state.studentCards.flatMap((card) => card.students);
       const existingStudent = allStudents.find(
-        (student) => student.id.toString() === id.toString()
+        (student) =>
+          student.name.toLowerCase() === name.toLowerCase() &&
+          student.surname.toLowerCase() === surname.toLowerCase()
       );
 
       if (existingStudent) {
-        console.warn("Студент с таким ID уже существует:", id);
+        console.warn("Студент с таким именем и фамилией уже существует:");
         return;
       }
 
+      const newStudentData = {
+        id,
+        name: capitalize(name),
+        surname: capitalize(surname),
+        login,
+        password,
+        class: studentClass,
+        role: "student" as const,
+      };
+
+      // Добавляем в Redux
+      const existingCard = state.studentCards.find(
+        (card) => card.number === number && card.letter === letter
+      );
+
       if (existingCard) {
-        const newStudent = {
-          id: id,
+        existingCard.students.push({
+          id,
           name: capitalize(name),
           surname: capitalize(surname),
-        };
-        existingCard.students.push(newStudent);
+        });
       } else {
         const newCard: StudentCard = {
-          id,
+          id: `class-${number}-${letter}`,
           number,
           letter,
           students: [
-            { id: id, name: capitalize(name), surname: capitalize(surname) },
+            { id, name: capitalize(name), surname: capitalize(surname) },
           ],
         };
         state.studentCards.push(newCard);
       }
+
+      // Вызываем колбэк для создания в БД
+      if (onStudentAdded) {
+        onStudentAdded(newStudentData);
+      }
     },
   },
 });
-export const {
-  updateStudentCards,
-  updateSelectedStudents,
-  mergeStudentCards,
-  addStudent,
-} = studentsSlice.actions;
+
+export const { updateStudentCards, updateSelectedStudents, addStudent } =
+  studentsSlice.actions;
 
 export default studentsSlice.reducer;

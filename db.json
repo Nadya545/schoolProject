@@ -288,6 +288,24 @@
       "surname": "Бузова",
       "role": "student",
       "class": "6Б"
+    },
+    {
+      "id": "student4353",
+      "login": "student4353",
+      "password": "123",
+      "name": "Коля",
+      "surname": "Поветкин",
+      "role": "student",
+      "class": "2А"
+    },
+    {
+      "id": "1764151431288",
+      "name": "Алина",
+      "surname": "Ляпина",
+      "login": "алина ляпина11А",
+      "password": "12345",
+      "class": "11А",
+      "role": "student"
     }
   ],
   "scores": [
@@ -424,25 +442,14 @@
       "date": "2025-11-18"
     },
     {
-      "id": "test-mitrofan-1",
-      "class": "7А",
-      "studentId": "cb81",
-      "teacherId": "792b",
-      "subject": "Литература",
-      "score": 5,
-      "type": "домашняя работа",
-      "comment": "Отличная работа!",
-      "date": "2024-01-15"
-    },
-    {
       "id": "0b12",
       "class": "7А",
       "studentId": "4350",
       "teacherId": "792b",
       "subject": "Литература",
-      "score": 5,
+      "score": 4,
       "type": "урок",
-      "comment": "отлично",
+      "comment": "хорошо",
       "date": "2025-11-18"
     },
     {
@@ -477,6 +484,17 @@
       "type": "урок",
       "comment": "я",
       "date": "2025-11-21"
+    },
+    {
+      "id": "a43e",
+      "class": "7А",
+      "studentId": "2266",
+      "teacherId": "792b",
+      "subject": "Литература",
+      "score": "2",
+      "type": "урок",
+      "comment": "плохо",
+      "date": "2025-11-22"
     }
   ]
 }

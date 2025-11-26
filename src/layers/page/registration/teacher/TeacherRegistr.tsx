@@ -2,13 +2,21 @@ import { useState } from "react";
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { subjects, availableClasses } from "../constants/constants";
-import { api } from "../../../../services/api";
 import Input from "../../../../ui/input/Input";
 import Button from "../../../../ui/button/Button";
+import {
+  useCreateUserMutation,
+  useGetUserByLoginQuery,
+} from "../../../../store/api/usersApi";
 import "./teacher-reg.scss";
 
 const TeacherRegistr = () => {
   const navigate = useNavigate();
+
+  // 🎯 Используем RTK Query мутации и запросы
+  const [createUser, { isLoading: createLoading, error: createError }] =
+    useCreateUserMutation();
+
   const [formData, setFormData] = useState({
     login: "",
     password: "",
@@ -24,6 +32,14 @@ const TeacherRegistr = () => {
     subject: "",
     classes: "",
   });
+
+  // 🔍 Проверяем уникальность логина при изменении
+  const { data: existingUser, refetch: checkLogin } = useGetUserByLoginQuery(
+    formData.login,
+    {
+      skip: !formData.login.trim(),
+    }
+  );
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -91,17 +107,14 @@ const TeacherRegistr = () => {
       isValid = false;
     }
 
+    // Проверяем уникальность логина
+    if (formData.login.trim() && existingUser) {
+      newError.login = "Данный логин уже занят!";
+      isValid = false;
+    }
+
     setError(newError);
     return isValid;
-  };
-
-  const checkLoginUnique = async (login: string): Promise<boolean> => {
-    try {
-      const existingUser = await api.getUserByLogin(login);
-      return !existingUser;
-    } catch (error) {
-      return false;
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -109,12 +122,8 @@ const TeacherRegistr = () => {
     if (!validateForm()) {
       return;
     }
+
     try {
-      const loginUnique = await checkLoginUnique(formData.login);
-      if (!loginUnique) {
-        setError((prev) => ({ ...prev, login: "Данный логин уже занят!" }));
-        return;
-      }
       const newTeacher = {
         login: formData.login,
         password: formData.password,
@@ -123,12 +132,16 @@ const TeacherRegistr = () => {
         subject: formData.subject,
         classes: formData.classes,
       };
+
       console.log("📝 Создаем пользователя:", newTeacher);
-      const createdUser = await api.createUser(newTeacher);
+
+      // 🎯 СОЗДАЕМ УЧИТЕЛЯ В БАЗЕ ДАННЫХ через RTK Query
+      const createdUser = await createUser(newTeacher).unwrap();
       console.log("✅ Пользователь создан:", createdUser);
 
       navigate("/authorisation");
     } catch (error) {
+      console.error("❌ Ошибка регистрации:", error);
       setError((prev) => ({
         ...prev,
         login: "Ошибка сервера, попробуйте позже.",
@@ -139,6 +152,14 @@ const TeacherRegistr = () => {
   return (
     <div className="teacher-reg-container">
       <h1 className="teacher-reg-title">Регистрация учителя</h1>
+
+      {/* Показываем ошибки RTK Query */}
+      {createError && (
+        <div className="error-message global-error">
+          ❌ Ошибка при создании пользователя
+        </div>
+      )}
+
       <form className="teacher-reg-form" onSubmit={handleSubmit}>
         <Input
           type="text"
@@ -148,20 +169,24 @@ const TeacherRegistr = () => {
           onChange={handleInputChange}
           error={!!error.login}
           required
+          disabled={createLoading}
         />
         {error.login && <span className="error-message">{error.login}</span>}
+
         <Input
-          type="text"
+          type="password" // 👈 Лучше использовать type="password"
           name="password"
           value={formData.password}
           placeholder="Придумайте пароль..."
           onChange={handleInputChange}
           error={!!error.password}
           required
+          disabled={createLoading}
         />
         {error.password && (
           <span className="error-message">{error.password}</span>
         )}
+
         <Input
           type="text"
           name="name"
@@ -170,6 +195,7 @@ const TeacherRegistr = () => {
           onChange={handleInputChange}
           error={!!error.name}
           required
+          disabled={createLoading}
         />
         {error.name && <span className="error-message">{error.name}</span>}
 
@@ -179,6 +205,7 @@ const TeacherRegistr = () => {
           value={formData.subject}
           className="subject"
           required
+          disabled={createLoading}
         >
           <option className="select-subject" value="">
             Выберете предмет
@@ -195,6 +222,7 @@ const TeacherRegistr = () => {
         {error.subject && (
           <span className="error-message">{error.subject}</span>
         )}
+
         <p>Выберете классы:</p>
         <div className="classes">
           {availableClasses.map((classItem) => {
@@ -205,15 +233,18 @@ const TeacherRegistr = () => {
                 key={classItem}
                 active={formData.classes.includes(classItem)}
                 onClick={() => handleClass(classItem)}
+                disabled={createLoading}
               >
                 {classItem}
               </Button>
             );
           })}
         </div>
+
         {error.classes && (
           <span className="error-message">{error.classes}</span>
         )}
+
         {formData.classes.length > 0 && (
           <div className="classes-select">
             <div>
@@ -227,8 +258,9 @@ const TeacherRegistr = () => {
             </div>
           </div>
         )}
-        <Button size="normal" type="submit">
-          Зарегистрироваться
+
+        <Button size="normal" type="submit" disabled={createLoading}>
+          {createLoading ? "Регистрация..." : "Зарегистрироваться"}
         </Button>
       </form>
 

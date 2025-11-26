@@ -22,8 +22,11 @@ const CardsContainer: React.FC<CardsContainerProps> = ({
   groupCards,
   groupSortNumber,
 }) => {
+  // 🔄 УБИРАЕМ дублирование createUser - он уже в StudentsList
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // 🔄 ИСПРАВЛЯЕМ: передаем только данные, без callback
     handleClickBtn(
       inputEventName,
       inputEventSurname,
@@ -34,6 +37,7 @@ const CardsContainer: React.FC<CardsContainerProps> = ({
 
   const groups = groupCards(studentCards);
   const sortNum = groupSortNumber(groups);
+
   return (
     <div className="CardsContainer">
       <div className="buttons">

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { api } from "../../../services/api";
 import Input from "../../../ui/input/Input";
 import Button from "../../../ui/button/Button";
+import { useLoginMutation } from "../../../store/api/usersApi"; // Измените на useLazyLoginQuery
 import "./auth.scss";
 
 const Authorisation = () => {
@@ -16,6 +16,31 @@ const Authorisation = () => {
     login: "",
     password: "",
   });
+
+  // 🎯 Используем ленивый запрос для авторизации
+  const [login, { data: user, isLoading, error: loginError }] =
+    useLoginMutation();
+
+  // 👀 Следим за успешной авторизацией
+  useEffect(() => {
+    if (user) {
+      console.log("✅ Пользователь авторизован:", user);
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", "user-token-" + user.id);
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+  // 👀 Следим за ошибками авторизации
+  useEffect(() => {
+    if (loginError) {
+      console.error("❌ Ошибка авторизации:", loginError);
+      setError({
+        login: "Неверный логин или пароль",
+        password: "Неверный логин или пароль",
+      });
+    }
+  }, [loginError]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -54,25 +79,25 @@ const Authorisation = () => {
     if (!validateForm()) {
       return;
     }
+
+    if (isLoading) {
+      return;
+    }
+
     try {
-      const user = await api.login(formData.login, formData.password);
-      if (!user) {
-        setError({
-          login: "Неверный логин",
-          password: "Неверный пароль",
-        });
-        return;
-      }
-      localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("token", "user-token-" + user.id);
-      navigate("/");
+      await login({
+        login: formData.login,
+        password: formData.password,
+      }).unwrap();
     } catch (error) {
+      console.error("❌ Ошибка при запросе авторизации:", error);
       setError({
         login: "Ошибка сервера",
         password: "Попробуйте позже!",
       });
     }
   };
+
   return (
     <div className="auth-container">
       <h1 className="auth-title">Вход в систему</h1>
@@ -87,6 +112,7 @@ const Authorisation = () => {
           placeholder="Введите ваш логин"
           error={!!error.login}
           required
+          disabled={isLoading}
         />
         {error.login && <span className="error-message">{error.login}</span>}
 
@@ -99,11 +125,16 @@ const Authorisation = () => {
           placeholder="Введите ваш пароль"
           error={!!error.password}
           required
+          disabled={isLoading}
         />
         {error.password && (
           <span className="error-message">{error.password}</span>
         )}
-        <Button size="normal"> Войти </Button>
+
+        <Button size="normal" type="submit" disabled={isLoading}>
+          {isLoading ? "Вход..." : "Войти"}
+        </Button>
+
         <p className="auth-link">
           Нет аккаунта? <Link to="/registration">Зарегистрироваться</Link>
         </p>

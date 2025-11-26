@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { api } from "../../../services/api";
-import { apiForScore, Score } from "../../../services/apiForScore";
 import { useAppSelector } from "../../../store/hooks";
 import Button from "../../../ui/button/Button";
 import CorrectScoreModal from "../../../ui/modal/CorrectScoreModal";
 import { Student } from "../../../types/studentType";
+import {
+  useDeleteScoreMutation,
+  useUpdateScoreMutation,
+  Score,
+} from "../../../store/api/scoresApi";
 
 interface GradeItemProps {
   grade: Score;
@@ -13,6 +16,7 @@ interface GradeItemProps {
   children: number[] | undefined;
   loadGrades: () => void;
 }
+
 const GradeItem: React.FC<GradeItemProps> = ({
   grade,
   role,
@@ -20,6 +24,11 @@ const GradeItem: React.FC<GradeItemProps> = ({
   loadGrades,
 }) => {
   const studentCards = useAppSelector((state) => state.students.studentCards);
+
+  // 🎯 Используем RTK Query мутации для удаления и обновления оценок
+  const [deleteScore, { isLoading: deleteLoading }] = useDeleteScoreMutation();
+  const [updateScoreMutation, { isLoading: updateLoading }] =
+    useUpdateScoreMutation();
 
   // ДОБАВЬТЕ ЭТОТ ВЫВОД ДЛЯ ДИАГНОСТИКИ
   const allStudents = React.useMemo(() => {
@@ -81,6 +90,7 @@ const GradeItem: React.FC<GradeItemProps> = ({
     }
     return `Студент ID: ${grade.studentId}`;
   };
+
   const renderParentStudentName = () => {
     if (currentChild) {
       return `${currentChild.name} ${currentChild.surname}`;
@@ -88,24 +98,34 @@ const GradeItem: React.FC<GradeItemProps> = ({
     return `Ребенок ID: ${grade.studentId}`;
   };
 
-  const deleteScore = async () => {
+  // 🎯 УДАЛЕНИЕ ОЦЕНКИ ЧЕРЕЗ RTK Query
+  const deleteScoreHandler = async () => {
     const isConfirmed = window.confirm(
       "Вы уверены, что хотите удалить эту оценку?"
     );
     if (!isConfirmed) return;
+
     try {
-      await apiForScore.deleteScore(grade.id);
-      loadGrades();
+      await deleteScore(grade.id).unwrap();
+      console.log("✅ Оценка удалена через RTK Query");
+      loadGrades(); // Обновляем список оценок
     } catch (error) {
+      console.error("❌ Ошибка удаления оценки:", error);
       alert("Не удалось удалить оценку, попробуйте позже!");
     }
   };
 
-  const updateScore = async (updateData: Partial<Score>) => {
+  // 🎯 ОБНОВЛЕНИЕ ОЦЕНКИ ЧЕРЕЗ RTK Query
+  const updateScoreHandler = async (updateData: Partial<Score>) => {
     try {
-      await apiForScore.updateScore(grade.id, updateData);
-      loadGrades();
+      await updateScoreMutation({
+        scoreId: grade.id,
+        updatedData: updateData,
+      }).unwrap();
+      console.log("✅ Оценка обновлена через RTK Query");
+      loadGrades(); // Обновляем список оценок
     } catch (error) {
+      console.error("❌ Ошибка обновления оценки:", error);
       alert("Не удалось отредактировать оценку, попробуйте позже!");
     }
   };
@@ -115,20 +135,23 @@ const GradeItem: React.FC<GradeItemProps> = ({
       {role === "parent" && (
         <div className="gradesForParent">{renderParentStudentName()}</div>
       )}
+
       {role === "teacher" && (
         <>
-          <CorrectScoreModal updateScore={updateScore} grade={grade} />
-          <Button size="normal" onClick={deleteScore}>
-            Удалить
+          <CorrectScoreModal updateScore={updateScoreHandler} grade={grade} />
+          <Button
+            size="normal"
+            onClick={deleteScoreHandler}
+            disabled={deleteLoading}
+          >
+            {deleteLoading ? "Удаление..." : "Удалить"}
           </Button>
         </>
       )}
 
       <div className="gradesForEveryone">
         <div>{new Date(grade.date).toLocaleDateString()}</div>
-
         <div> 👨‍🎓{renderStudentName()}</div>
-
         <div>📚 {grade.subject}</div>
         <div>⭐ {grade.score}</div>
         <div>📝 {grade.type}</div>

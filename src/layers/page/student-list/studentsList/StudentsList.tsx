@@ -12,12 +12,13 @@ import {
 import { Group } from "../../../../types/studentType";
 import { useAppSelector } from "../../../../store/hooks";
 import {
+  addStudent,
   updateSelectedStudents,
   updateStudentCards,
-  mergeStudentCards,
 } from "../../../../store/slices/studentsSlice";
 import { useDispatch } from "react-redux";
-import { loadStudentsFromDB } from "../useLoadStudentsFromBd";
+import { useStudentsSync } from "../useStudentsSync";
+import { useCreateUserMutation } from "../../../../store/api/usersApi";
 
 function StudentsList() {
   const dispatch = useDispatch();
@@ -28,10 +29,10 @@ function StudentsList() {
 
   const navigate = useNavigate();
 
-  // Загружаем студентов из БД при загрузке компонента
-  useEffect(() => {
-    loadStudentsFromDB(dispatch, studentCards);
-  }, []); // ← ДОБАВЬТЕ этот useEffect
+  const { isLoading: syncLoading, error: syncError } = useStudentsSync();
+
+  const [createUser, { isLoading: createLoading, error: createError }] =
+    useCreateUserMutation();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -60,7 +61,6 @@ function StudentsList() {
       .sort((a, b) => {
         return a - b;
       });
-
     return sort;
   };
 
@@ -69,38 +69,79 @@ function StudentsList() {
   const [numberSelect, setNumberSelect] = useState<number>(0);
   const [letterSelect, setLetterSelect] = useState("");
 
-  const { handleMoveStudentsById, createNewStudents } = handleStudents(
-    studentCards,
-    (newCards) => dispatch(updateStudentCards(newCards))
-  );
-
-  const handleClickBtn = async (
-    inputEventName: string,
-    inputEventSurname: string,
-    numberSelect: number,
-    letterSelect: string
+  // 🔄 ИСПРАВЛЯЕМ: создаем совместимую функцию для handleStudents
+  const setStudentCardsState = (
+    newCards: StudentCard[] | ((prev: StudentCard[]) => StudentCard[])
   ) => {
-    if (!numberSelect) {
-      alert("Выберете номер класса!");
-      return;
+    if (typeof newCards === "function") {
+      // Если передана функция (как в setState)
+      const updatedCards = newCards(studentCards);
+      dispatch(updateStudentCards(updatedCards));
+    } else {
+      // Если передан массив
+      dispatch(updateStudentCards(newCards));
     }
-    const numberSelectAsNumber = Number(numberSelect);
-    console.log("inputEventName перед вызовом:", inputEventName);
-    console.log("inputEventSurname перед вызовом:", inputEventSurname);
-    console.log("numberSelect перед вызовом:", numberSelect);
-    console.log("letterSelect перед вызовом:", letterSelect);
-    await createNewStudents(
-      inputEventName,
-      inputEventSurname,
-      numberSelectAsNumber,
-      letterSelect
-    );
-    setInputEventName("");
-    setInputEventSurname("");
-    setNumberSelect(0);
-    setLetterSelect("");
   };
 
+  // 🔄 ИСПРАВЛЯЕМ: передаем совместимую функцию
+  const { handleMoveStudentsById } = handleStudents(
+    studentCards,
+    setStudentCardsState // 🔄 Теперь совместимо с SetStateAction
+  );
+
+  // 🔄 ИСПРАВЛЕННЫЙ handleClickBtn
+  const handleClickBtn = (
+    name: string,
+    surname: string,
+    number: number,
+    letter: string
+  ) => {
+    if (name.trim() && surname.trim() && number && letter) {
+      const studentClass = `${number}${letter}`;
+
+      // Генерируем данные для студента
+      const studentId = Date.now().toString();
+      const login = `${name.toLowerCase()}${surname.toLowerCase()}${number}${letter}`;
+      const password = "12345";
+
+      const studentData = {
+        id: studentId,
+        name: name.trim(),
+        surname: surname.trim(),
+        login,
+        password,
+        class: studentClass,
+        role: "student" as const,
+      };
+
+      // 1. Сначала добавляем в Redux
+      dispatch(
+        addStudent({
+          name,
+          surname,
+          class: studentClass,
+        })
+      );
+
+      // 2. Затем создаем в БД
+      createUser(studentData)
+        .unwrap()
+        .then(() => {
+          console.log("✅ Студент добавлен в БД:", studentData);
+        })
+        .catch((error) => {
+          console.error("❌ Ошибка при добавлении в БД:", error);
+        });
+
+      // Очищаем поля
+      setInputEventName("");
+      setInputEventSurname("");
+      setNumberSelect(0);
+      setLetterSelect("");
+    }
+  };
+
+  // 🔄 ИСПРАВЛЕННЫЙ handleMoveStudents
   const handleMoveStudents = (index: number) => {
     const newStudentCards = handleMoveStudentsById(
       selectedStudents,
@@ -108,9 +149,10 @@ function StudentsList() {
       studentCards,
       numberSelect,
       letterSelect
-    ); //достаю  newCards: и  movedStudents
+    );
 
     dispatch(updateStudentCards(newStudentCards.newCards));
+
     dispatch(
       updateSelectedStudents(
         selectedStudents.filter((student) => {
@@ -123,8 +165,40 @@ function StudentsList() {
     );
   };
 
+  // Показываем состояние загрузки
+  if (syncLoading) {
+    return (
+      <div className="ClassList">
+        <div className="loading">🔄 Загрузка студентов из базы данных...</div>
+      </div>
+    );
+  }
+
+  if (syncError) {
+    return (
+      <div className="ClassList">
+        <div className="error">
+          ❌ Ошибка загрузки студентов: {String(syncError)}
+        </div>
+        <button onClick={() => window.location.reload()}>Повторить</button>
+      </div>
+    );
+  }
+
   return (
     <div className="ClassList">
+      {createLoading && (
+        <div className="loading-overlay">
+          <div className="loading-message">Создание студента...</div>
+        </div>
+      )}
+
+      {createError && (
+        <div className="error-message">
+          ❌ Ошибка при создании студента: {String(createError)}
+        </div>
+      )}
+
       <CardsContainer
         dispatch={dispatch}
         selectedStudents={selectedStudents}

@@ -4,9 +4,8 @@ import { useGetUser } from "../../../hooks/useGetUser";
 import { useAppSelector } from "../../../store/hooks";
 import Button from "../../../ui/button/Button";
 import Input from "../../../ui/input/Input";
-import { api } from "../../../services/api";
 import { useNavigate } from "react-router-dom";
-import { apiForScore } from "../../../services/apiForScore";
+import { useCreateScoreMutation } from "../../../store/api/scoresApi";
 
 const CreateGradeForm = () => {
   const { getCurrentUser } = useGetUser();
@@ -14,10 +13,15 @@ const CreateGradeForm = () => {
   const studentCards = useAppSelector((state) => state.students.studentCards);
   const navigate = useNavigate();
 
+  // 🎯 Используем RTK Query мутацию для создания оценки
+  const [createScore, { isLoading: createLoading, error: createError }] =
+    useCreateScoreMutation();
+
   interface NewGrade {
     class: string;
     studentId: string;
-    teacherId: string;
+    teacherId?: string;
+    subject?: string;
     score: number;
     type: string;
     comment: string;
@@ -82,6 +86,7 @@ const CreateGradeForm = () => {
       }
     });
   };
+
   const handleStudent = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const studentId = e.target.value;
     setFormData((prev) => ({
@@ -145,10 +150,17 @@ const CreateGradeForm = () => {
     console.log("👨‍🏫 Teacher перед созданием:", teacher);
     console.log("Teacher ID:", teacher?.id);
     console.log("Teacher subject:", teacher?.subject);
+
     e.preventDefault();
     if (!validateForm()) {
       return;
     }
+
+    if (createLoading) {
+      alert("Подождите, создается оценка...");
+      return;
+    }
+
     try {
       const newGrade = {
         class: formData.class,
@@ -160,18 +172,32 @@ const CreateGradeForm = () => {
         comment: formData.comment,
         date: new Date().toISOString().split("T")[0],
       };
-      const result = await apiForScore.createScore(newGrade);
+
+      console.log("📝 Создаем оценку:", newGrade);
+
+      // 🎯 СОЗДАЕМ ОЦЕНКУ ЧЕРЕЗ RTK Query
+      const result = await createScore(newGrade).unwrap();
       console.log("✅ Оценка создана:", result);
+
       navigate("/grades-list");
     } catch (error) {
+      console.error("❌ Ошибка создания оценки:", error);
       setError((prev) => ({
         ...prev,
         score: "Ошибка сервера, попробуйте позже.",
       }));
     }
   };
+
   return (
     <form className="createForm" onSubmit={handleSubmit}>
+      {/* Показываем ошибки RTK Query */}
+      {createError && (
+        <div className="error-message global-error">
+          ❌ Ошибка при создании оценки
+        </div>
+      )}
+
       <p>Выберете класc:</p>
       <div className="class">
         {teacher?.classes?.map((classItem) => {
@@ -182,6 +208,7 @@ const CreateGradeForm = () => {
               key={classItem}
               active={formData.class === classItem}
               onClick={() => handleClass(classItem)}
+              disabled={createLoading}
             >
               {classItem}
             </Button>
@@ -196,9 +223,14 @@ const CreateGradeForm = () => {
           ⚠️ {error.class}
         </div>
       )}
+
       <div>
         <p>Выберете ученика:</p>
-        <select value={formData.studentId} onChange={handleStudent}>
+        <select
+          value={formData.studentId}
+          onChange={handleStudent}
+          disabled={createLoading}
+        >
           <option value={0}>Выберете ученика</option>
           {students.map((student) => (
             <option value={student.id} key={student.id}>
@@ -207,13 +239,20 @@ const CreateGradeForm = () => {
           ))}
         </select>
       </div>
-      <select value={formData.score} name="score" onChange={handleInputChange}>
+
+      <select
+        value={formData.score}
+        name="score"
+        onChange={handleInputChange}
+        disabled={createLoading}
+      >
         <option value={0}>Выберите оценку</option>
         <option value={2}>2</option>
         <option value={3}>3</option>
         <option value={4}>4</option>
         <option value={5}>5</option>
       </select>
+
       <div className="type">
         <Input
           type="text"
@@ -223,8 +262,10 @@ const CreateGradeForm = () => {
           onChange={handleInputChange}
           error={!!error.type}
           required
+          disabled={createLoading}
         />
       </div>
+
       <div className="comment">
         <Input
           type="text"
@@ -234,10 +275,12 @@ const CreateGradeForm = () => {
           onChange={handleInputChange}
           error={!!error.comment}
           required
+          disabled={createLoading}
         />
       </div>
-      <Button type="submit" size="normal">
-        Поставить оценку
+
+      <Button type="submit" size="normal" disabled={createLoading}>
+        {createLoading ? "Создание оценки..." : "Поставить оценку"}
       </Button>
     </form>
   );
