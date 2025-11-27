@@ -12,6 +12,8 @@ import {
   useGetScoreForTeacherQuery,
 } from "../../../store/api/scoresApi";
 import { Score } from "../../../store/api/scoresApi";
+import GradesTable from "./GradesTable";
+import "./grades.scss";
 
 const GradesList = () => {
   console.log("🎯 1. GradesList компонент начал рендериться");
@@ -56,6 +58,7 @@ const GradesList = () => {
     data: studentGrades,
     isLoading: studentGradesLoading,
     error: studentGradesError,
+    refetch: refetchStudentGrades,
   } = useGetScoreByStudentIdQuery(currentUser.id!, {
     skip: currentUser.role !== "student" || !currentUser.id,
   });
@@ -64,6 +67,7 @@ const GradesList = () => {
     data: parentGrades,
     isLoading: parentGradesLoading,
     error: parentGradesError,
+    refetch: refetchParentGrades,
   } = useGetScoreByParentIdQuery(currentUser.id!, {
     skip: currentUser.role !== "parent" || !currentUser.id,
   });
@@ -72,9 +76,21 @@ const GradesList = () => {
     data: teacherGrades,
     isLoading: teacherGradesLoading,
     error: teacherGradesError,
+    refetch: refetchTeacherGrades,
   } = useGetScoreForTeacherQuery(currentUser.id!, {
     skip: currentUser.role !== "teacher" || !currentUser.id,
   });
+
+  const reLoadGrades = () => {
+    setLoading(true);
+    if (currentUser.role === "student") {
+      refetchStudentGrades();
+    } else if (currentUser.role === "parent") {
+      refetchParentGrades();
+    } else if (currentUser.role === "teacher") {
+      refetchTeacherGrades();
+    }
+  };
 
   // 🔄 Объединяем загрузку оценок
   useEffect(() => {
@@ -142,7 +158,8 @@ const GradesList = () => {
 
   return (
     <div className="gradeList">
-      <div>
+      {/* 🔥 УЛУЧШИЛИ ШАПКУ - сделали компактнее */}
+      <div className="gradeList-header">
         <Button
           size="addAndOut"
           className="btn-class-list"
@@ -150,13 +167,15 @@ const GradesList = () => {
         >
           Выход
         </Button>
-      </div>
 
-      <h1 className="gradeList-title">Журнал оценок</h1>
+        <h1 className="gradeList-title">Журнал оценок</h1>
 
-      <div className="crateGrade">
         {currentUser.role === "teacher" && (
-          <Button size="normal" onClick={() => navigate("/create-grade")}>
+          <Button
+            size="addAndOut"
+            onClick={() => navigate("/create-grade")}
+            className="create-grade-btn"
+          >
             Поставить оценку
           </Button>
         )}
@@ -166,29 +185,18 @@ const GradesList = () => {
 
       {isLoading && <div>🔄 Загрузка оценок...</div>}
 
+      {/* 🔥 УПРОСТИЛИ ЛОГИКУ ОТОБРАЖЕНИЯ */}
       {!hasError && !isLoading && (
-        <div>
+        <div className="grades-content">
           {grades.length === 0 ? (
-            <div>Оценок пока нет...</div>
+            <div className="no-grades">📝 Оценок пока нет...</div>
           ) : (
-            <div>
-              <h3>Найдено {grades.length} оценок:</h3>
-              {grades.map((grade) => (
-                <div key={grade.id}>
-                  <GradeItem
-                    grade={grade}
-                    role={currentUser.role}
-                    id={currentUser.id}
-                    children={currentUser.children}
-                    loadGrades={() => {
-                      // Принудительное обновление через перезагрузку компонента
-                      setLoading(true);
-                      setTimeout(() => setLoading(false), 100);
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
+            <GradesTable
+              grades={grades}
+              role={currentUser.role}
+              children={currentUser.children}
+              reLoadGrades={reLoadGrades}
+            />
           )}
         </div>
       )}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useModal } from "../../hooks/useModal";
 import Button from "../button/Button";
 import Modal from "./Modal";
-import { Score } from "../../services/api";
+import { Score } from "../../store/api/scoresApi";
 import Input from "../input/Input";
 const CorrectScoreModal = ({ updateScore, grade }) => {
   const { isOpen, onOpen, onClose } = useModal();
@@ -21,7 +21,7 @@ const CorrectScoreModal = ({ updateScore, grade }) => {
   return (
     <div>
       <Button size="addAndOut" className="btn-modal" onClick={onOpen}>
-        Редактировать
+        ✏️
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
