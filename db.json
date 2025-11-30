@@ -129,7 +129,7 @@
       "name": "Павел",
       "surname": "Плюшкин",
       "role": "student",
-      "class": "7"
+      "class": "7А"
     },
     {
       "id": "4350",
@@ -306,6 +306,15 @@
       "password": "12345",
       "class": "11А",
       "role": "student"
+    },
+    {
+      "id": "1764151431289",
+      "name": "Карина",
+      "surname": "Соломатина",
+      "login": "карина4А",
+      "password": "12345",
+      "class": "4А",
+      "role": "student"
     }
   ],
   "scores": [
@@ -442,26 +451,16 @@
       "date": "2025-11-18"
     },
     {
-      "id": "0b12",
-      "class": "7А",
-      "studentId": "4350",
-      "teacherId": "792b",
-      "subject": "Литература",
-      "score": 4,
-      "type": "урок",
-      "comment": "хорошо",
-      "date": "2025-11-18"
+      "score": 5,
+      "type": "исправил",
+      "comment": "отли",
+      "id": "0b12"
     },
     {
-      "id": "ee9f",
-      "class": "7А",
-      "studentId": "2266",
-      "teacherId": "792b",
-      "subject": "Литература",
-      "score": "4",
+      "score": 5,
       "type": "урок",
       "comment": "хорошо",
-      "date": "2025-11-18"
+      "id": "ee9f"
     },
     {
       "id": "19c4",
@@ -495,6 +494,111 @@
       "type": "урок",
       "comment": "плохо",
       "date": "2025-11-22"
+    },
+    {
+      "score": 5,
+      "type": "урок",
+      "comment": "хорошо",
+      "id": "1c8a"
+    },
+    {
+      "score": "5",
+      "type": "урок",
+      "comment": "хорошо",
+      "id": "3c4d"
+    },
+    {
+      "id": "f309",
+      "class": "7А",
+      "studentId": "1db0",
+      "teacherId": "792b",
+      "subject": "Литература",
+      "score": "4",
+      "type": "урок",
+      "comment": "хорошо",
+      "date": "2025-11-28"
+    },
+    {
+      "id": "d3a2",
+      "class": "7А",
+      "studentId": "1db0",
+      "teacherId": "792b",
+      "subject": "Литература",
+      "score": "4",
+      "type": "урок",
+      "comment": "хорошо",
+      "date": "2025-11-28"
+    },
+    {
+      "score": 5,
+      "type": "урок",
+      "comment": "отлично",
+      "id": "cf0d"
+    },
+    {
+      "score": 4,
+      "type": "урок",
+      "comment": "х",
+      "id": "3379"
+    },
+    {
+      "id": "c2a8",
+      "class": "7А",
+      "studentId": "1db0",
+      "teacherId": "792b",
+      "subject": "Литература",
+      "score": "5",
+      "type": "урок",
+      "comment": "отлично",
+      "date": "2025-11-28"
+    },
+    {
+      "id": "ea5b",
+      "class": "7А",
+      "studentId": "1db0",
+      "teacherId": "792b",
+      "subject": "Литература",
+      "score": "5",
+      "type": "урок",
+      "comment": "отлично",
+      "date": "2025-11-28"
+    },
+    {
+      "id": "2943",
+      "class": "4А",
+      "studentId": "1764151431289",
+      "teacherId": "792b",
+      "subject": "Литература",
+      "score": "5",
+      "type": "урок",
+      "comment": "отлично",
+      "date": "2025-11-28"
+    },
+    {
+      "score": 4,
+      "id": "e903"
+    },
+    {
+      "id": "09a2",
+      "class": "7А",
+      "studentId": "2266",
+      "teacherId": "792b",
+      "subject": "Литература",
+      "score": "5",
+      "type": "урок (пересдача)",
+      "comment": "отлично",
+      "date": "2025-11-30"
+    },
+    {
+      "id": "6137",
+      "class": "7А",
+      "studentId": "1db0",
+      "teacherId": "792b",
+      "subject": "Литература",
+      "score": "4",
+      "type": "исправил",
+      "comment": "хорошо",
+      "date": "2025-11-30"
     }
   ]
 }

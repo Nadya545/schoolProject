@@ -1,4 +1,4 @@
-$colorWelcomeAndAuthWithReg: rgb(33, 33, 119);
+/*$colorWelcomeAndAuthWithReg: rgb(33, 33, 119);
 $fontFamilyWelcomeAndAuthWithReg: "Lucida Sans", "Lucida Sans Regular",
   "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 .gradeList {
@@ -58,6 +58,149 @@ $fontFamilyWelcomeAndAuthWithReg: "Lucida Sans", "Lucida Sans Regular",
             text-align: center;
             border-top: 1px solid lighten($colorWelcomeAndAuthWithReg, 30%);
             border-bottom: 1px solid lighten($colorWelcomeAndAuthWithReg, 30%);
+          }
+        }
+      }
+    }
+  }
+}*/
+
+$colorWelcomeAndAuthWithReg: rgb(33, 33, 119);
+$fontFamilyWelcomeAndAuthWithReg: "Lucida Sans", "Lucida Sans Regular",
+  "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+.gradeList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: $colorWelcomeAndAuthWithReg;
+  font-family: $fontFamilyWelcomeAndAuthWithReg;
+  align-items: center;
+  .gradeList-header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .grades-content {
+    display: flex;
+    width: 98%;
+    .journal-view {
+      width: 100%;
+      .journal-header {
+        text-align: center;
+        margin-bottom: 20px;
+
+        h2 {
+          color: rgb(33, 33, 119);
+          margin: 0;
+        }
+      }
+
+      // 🔥 ОБЕРТКА ДЛЯ ЗАКРУГЛЕННЫХ УГЛОВ
+      .table-container {
+        box-shadow: 0 4px 12px rgba(33, 33, 119, 0.1); // 🔥 МЯГКАЯ ТЕНЬ
+        border: 1px solid rgb(33, 33, 119);
+
+        .journal-table {
+          width: 100%;
+          border-collapse: collapse;
+          border: 1px solid rgb(33, 33, 119);
+          table-layout: fixed;
+
+          th,
+          td {
+            border: 1px solid rgb(33, 33, 119);
+            padding: 8px 4px;
+            text-align: center;
+          }
+
+          th {
+            background-color: lighten(rgb(33, 33, 119), 50%);
+          }
+
+          .student-column {
+            width: 230px;
+            min-width: 230px;
+            max-width: 230px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .date-header {
+            min-width: 40px;
+            padding: 4px 2px;
+
+            .date-day {
+              font-weight: bold;
+            }
+
+            .date-month {
+              font-size: 10px;
+              color: #666;
+            }
+          }
+
+          .student-name {
+            font-weight: bold;
+            padding: 8px;
+          }
+
+          .grade-cell {
+            text-align: center;
+            padding: 4px;
+
+            min-width: 45px;
+            height: 45px;
+            vertical-align: middle;
+
+            .compact-grade {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 2px;
+
+              .grade-badge {
+                display: inline-block;
+                width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                line-height: 26px;
+                font-weight: bold;
+
+                &.grade-5 {
+                  background: #4caf50;
+                  color: white;
+                }
+                &.grade-4 {
+                  background: #8bc34a;
+                  color: white;
+                }
+                &.grade-3 {
+                  background: #ffc107;
+                  color: black;
+                }
+                &.grade-2 {
+                  background: #f44336;
+                  color: white;
+                }
+              }
+
+              .compact-actions {
+                display: flex;
+                gap: 2px;
+
+                button {
+                  padding: 2px 4px;
+                  font-size: 10px;
+                }
+              }
+            }
+
+            .no-grade {
+              color: #ccc;
+            }
           }
         }
       }
