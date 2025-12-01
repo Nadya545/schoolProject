@@ -174,7 +174,7 @@ const TeacherRegistr = () => {
         {error.login && <span className="error-message">{error.login}</span>}
 
         <Input
-          type="password" // 👈 Лучше использовать type="password"
+          type="password"
           name="password"
           value={formData.password}
           placeholder="Придумайте пароль..."

@@ -1,0 +1,169 @@
+@use "sass:color";
+
+$colorWelcomeAndAuthWithReg: rgb(33, 33, 119);
+$fontFamilyWelcomeAndAuthWithReg: "Lucida Sans", "Lucida Sans Regular",
+  "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+
+.student-grades-table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: $colorWelcomeAndAuthWithReg;
+  font-family: $fontFamilyWelcomeAndAuthWithReg;
+  align-items: center;
+
+  .student-info {
+    text-align: center;
+    margin-bottom: 20px;
+    width: 100%;
+
+    h2 {
+      color: $colorWelcomeAndAuthWithReg;
+      margin: 0 0 10px 0;
+    }
+
+    .student-details {
+      color: #666;
+      font-size: 14px;
+    }
+  }
+
+  .table-container {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(33, 33, 119, 0.1);
+    border: 1px solid $colorWelcomeAndAuthWithReg;
+
+    .grades-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+
+      th,
+      td {
+        border: 1px solid $colorWelcomeAndAuthWithReg;
+        padding: 8px 4px;
+        text-align: center;
+      }
+
+      th {
+        background-color: color.adjust(
+          $colorWelcomeAndAuthWithReg,
+          $lightness: 50%
+        );
+      }
+
+      .subject-column {
+        width: 150px;
+        min-width: 150px;
+        text-align: center;
+        font-weight: bold;
+      }
+
+      .date-header {
+        min-width: 60px;
+        padding: 4px 2px;
+
+        .date-day {
+          font-weight: bold;
+        }
+
+        .date-month {
+          font-size: 10px;
+          color: #666;
+        }
+      }
+
+      .subject-name {
+        font-weight: bold;
+        padding: 8px;
+        text-align: center;
+        background-color: color.adjust(
+          $colorWelcomeAndAuthWithReg,
+          $lightness: 55%
+        );
+      }
+
+      .subject-row {
+        &:hover {
+          background-color: rgba(33, 33, 119, 0.03);
+        }
+      }
+
+      .grade-cell {
+        text-align: center;
+        padding: 4px;
+        min-width: 50px;
+        height: 50px;
+        vertical-align: middle;
+
+        .compact-grade {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+
+          .grade-badge {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            line-height: 28px;
+            font-weight: bold;
+            font-size: 14px;
+
+            &.grade-5 {
+              background: #4caf50;
+              color: white;
+            }
+            &.grade-4 {
+              background: #8bc34a;
+              color: white;
+            }
+            &.grade-3 {
+              background: #ffc107;
+              color: black;
+            }
+            &.grade-2 {
+              background: #f44336;
+              color: white;
+            }
+          }
+
+          .grade-type {
+            font-size: 10px;
+            color: #666;
+            max-width: 60px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            &:hover {
+              overflow: visible;
+              white-space: normal;
+              background: white;
+              padding: 4px;
+              border-radius: 4px;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+              z-index: 10;
+              position: absolute;
+              max-width: 200px; // 🔥 ПРИ НАВЕДЕНИИ ПОКАЗЫВАЕМ ВСЁ
+            }
+          }
+        }
+
+        .no-grade {
+          color: #ccc;
+        }
+      }
+    }
+  }
+
+  .no-grades {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 16px;
+  }
+}

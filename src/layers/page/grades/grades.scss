@@ -1,69 +1,4 @@
-/*$colorWelcomeAndAuthWithReg: rgb(33, 33, 119);
-$fontFamilyWelcomeAndAuthWithReg: "Lucida Sans", "Lucida Sans Regular",
-  "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-.gradeList {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  color: $colorWelcomeAndAuthWithReg;
-  font-family: $fontFamilyWelcomeAndAuthWithReg;
-  align-items: center;
-
-  .create-grade-btn {
-    align-self: none !important;
-  }
-
-  .gradeList-header {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: space-around;
-  }
-  .grades-content {
-    display: flex;
-    width: 98%;
-
-    .grades-table {
-      width: 100%;
-      background: white;
-      border-radius: 8px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-      margin-top: 20px;
-      .table {
-        width: 100%;
-        border-collapse: collapse;
-        border: 1px solid $colorWelcomeAndAuthWithReg;
-        border-spacing: 0;
-        border-radius: 8px;
-        overflow: hidden;
-
-        thead {
-          th {
-            border: 1px solid $colorWelcomeAndAuthWithReg; // ✅ Вертикальные границы
-            padding: 12px 8px;
-            background-color: lighten($colorWelcomeAndAuthWithReg, 50%);
-            text-align: center;
-            border-bottom: 2px solid $colorWelcomeAndAuthWithReg;
-          }
-        }
-        .grade-table-row {
-          border: 1px solid $colorWelcomeAndAuthWithReg;
-
-          td {
-            border: 1px solid $colorWelcomeAndAuthWithReg;
-
-            padding: 10px 8px;
-            text-align: center;
-            border-top: 1px solid lighten($colorWelcomeAndAuthWithReg, 30%);
-            border-bottom: 1px solid lighten($colorWelcomeAndAuthWithReg, 30%);
-          }
-        }
-      }
-    }
-  }
-}*/
+@use "sass:color";
 
 $colorWelcomeAndAuthWithReg: rgb(33, 33, 119);
 $fontFamilyWelcomeAndAuthWithReg: "Lucida Sans", "Lucida Sans Regular",
@@ -116,7 +51,7 @@ $fontFamilyWelcomeAndAuthWithReg: "Lucida Sans", "Lucida Sans Regular",
           }
 
           th {
-            background-color: lighten(rgb(33, 33, 119), 50%);
+            background-color: color.adjust(rgb(33, 33, 119), $lightness: 50%);
           }
 
           .student-column {
