@@ -34,12 +34,14 @@ const TeacherRegistr = () => {
   });
 
   // 🔍 Проверяем уникальность логина при изменении
-  const { data: existingUser, refetch: checkLogin } = useGetUserByLoginQuery(
-    formData.login,
-    {
-      skip: !formData.login.trim(),
-    }
-  );
+  const {
+    data: existingUser,
+    refetch: checkLogin,
+    isError: isLoginError,
+    error: loginError,
+  } = useGetUserByLoginQuery(formData.login, {
+    skip: !formData.login.trim(),
+  });
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -87,7 +89,11 @@ const TeacherRegistr = () => {
     if (!formData.login.trim()) {
       newError.login = "Введите логин!";
       isValid = false;
+    } else if (existingUser) {
+      newError.login = "Данный логин уже занят!";
+      isValid = false;
     }
+
     if (!formData.password) {
       newError.password = "Введите пароль!";
       isValid = false;

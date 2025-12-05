@@ -57,7 +57,7 @@ export const usersApi = createApi({
       providesTags: ["User"],
     }),
 
-    getUserByLogin: builder.query<User, string>({
+    getUserByLogin: builder.query<User | null, string>({
       query: (login) => `users?login=${login}`,
       transformResponse: (response: User[]) => {
         const user = response[0];
@@ -67,7 +67,7 @@ export const usersApi = createApi({
             children: user.children ? user.children.map(Number) : undefined,
           };
         }
-        throw new Error("Пользователь не найден");
+        return null;
       },
     }),
 
