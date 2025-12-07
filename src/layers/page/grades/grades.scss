@@ -16,6 +16,10 @@ $fontFamilyWelcomeAndAuthWithReg: "Lucida Sans", "Lucida Sans Regular",
     width: 100%;
     align-items: center;
     justify-content: space-around;
+    .btn-class-list {
+      align-self: flex-start; // Выравниваем по левому краю
+      margin: 20px;
+    }
   }
   .grades-content {
     display: flex;

@@ -41,6 +41,13 @@ const CardsContainer: React.FC<CardsContainerProps> = ({
   return (
     <div className="CardsContainer">
       <div className="buttons">
+        <Button
+          size="addAndOut"
+          className="btn-class-list"
+          onClick={handleLogout}
+        >
+          На главную
+        </Button>
         <AddStudentModal
           inputEventName={inputEventName}
           inputEventSurname={inputEventSurname}
@@ -52,13 +59,6 @@ const CardsContainer: React.FC<CardsContainerProps> = ({
           setNumberSelect={setNumberSelect}
           setLetterSelect={setLetterSelect}
         />
-        <Button
-          size="addAndOut"
-          className="btn-class-list"
-          onClick={handleLogout}
-        >
-          Выход
-        </Button>
       </div>
 
       {sortNum.map((number) => (

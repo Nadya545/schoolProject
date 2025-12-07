@@ -3,8 +3,7 @@ import { useModal } from "../../hooks/useModal";
 import Button from "../button/Button";
 import Modal from "./Modal";
 import Input from "../input/Input";
-import NumberSelect from "../selects/NumberSelect";
-import LetterSelect from "../selects/LetterSelect";
+import Select from "../selects/Select";
 import "./style.scss";
 import { AddStudentModalProps } from "./typeModal/typeModal";
 
@@ -27,6 +26,11 @@ const AddStudentModal = ({
     handleSubmit(e);
     onClose();
   };
+
+  const numberOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+  const letterOptions = ["А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "К"];
+
   return (
     <div>
       <Button size="addAndOut" className="btn-modal" onClick={onOpen}>
@@ -54,14 +58,34 @@ const AddStudentModal = ({
               placeholder="Введите фамилию ученика..."
             />
 
-            <NumberSelect
-              numberSelect={numberSelect}
-              setNumberSelect={setNumberSelect}
-            />
-            <LetterSelect
-              letterSelect={letterSelect}
-              setLetterSelect={setLetterSelect}
-            />
+            {/* Селект для номера класса */}
+            <Select
+              value={numberSelect}
+              onChange={(e) => setNumberSelect(Number(e.target.value))}
+              placeholder="Выберите номер класса"
+            >
+              <option value="">Выберите номер</option>
+              {numberOptions.map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
+            </Select>
+
+            {/* Селект для буквы класса */}
+            <Select
+              value={letterSelect}
+              onChange={(e) => setLetterSelect(e.target.value)}
+              placeholder="Выберите букву класса"
+            >
+              <option value="">Выберите букву</option>
+              {letterOptions.map((letter) => (
+                <option key={letter} value={letter}>
+                  {letter}
+                </option>
+              ))}
+            </Select>
+
             <Button size="normal" type="submit">
               Ok
             </Button>

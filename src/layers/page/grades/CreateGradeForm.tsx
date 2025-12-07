@@ -6,6 +6,8 @@ import Button from "../../../ui/button/Button";
 import Input from "../../../ui/input/Input";
 import { useNavigate } from "react-router-dom";
 import { useCreateScoreMutation } from "../../../store/api/scoresApi";
+import Select from "../../../ui/selects/Select";
+import "./createGrade.scss";
 
 const CreateGradeForm = () => {
   const { getCurrentUser } = useGetUser();
@@ -140,6 +142,30 @@ const CreateGradeForm = () => {
     if (!formData.type.trim()) {
       newError.type = "Введите тип работы!";
       isValid = false;
+    } else {
+      const trimmedType = formData.type.trim();
+
+      //  Длина
+      if (trimmedType.length < 3) {
+        newError.type = "Минимум 3 символа";
+        isValid = false;
+      } else if (trimmedType.length > 100) {
+        newError.type = "Максимум 100 символов";
+        isValid = false;
+      }
+
+      // Хотя бы одна буква
+      if (!/[А-ЯЁа-яёA-Za-z]/.test(trimmedType)) {
+        newError.type = "Должен содержать буквы";
+        isValid = false;
+      }
+
+      //  Запрещенные символы
+      const forbiddenChars = /[<>{}[\]$%^&*()_+=|\\/]/;
+      if (forbiddenChars.test(trimmedType)) {
+        newError.type = "Уберите специальные символы";
+        isValid = false;
+      }
     }
 
     setError(newError);
@@ -199,37 +225,37 @@ const CreateGradeForm = () => {
       )}
 
       <p>Выберете класc:</p>
-      <div className="class">
-        {teacher?.classes?.map((classItem) => {
-          return (
-            <Button
-              size="normal"
-              type="button"
-              key={classItem}
-              active={formData.class === classItem}
-              onClick={() => handleClass(classItem)}
-              disabled={createLoading}
-            >
-              {classItem}
-            </Button>
-          );
-        })}
-      </div>
-      {error.class && (
-        <div
-          className="error-message"
-          style={{ color: "red", margin: "10px 0" }}
-        >
-          ⚠️ {error.class}
+      <div className="container-createForm">
+        <div className="class">
+          {teacher?.classes?.map((classItem) => {
+            return (
+              <Button
+                size="normal"
+                type="button"
+                key={classItem}
+                active={formData.class === classItem}
+                onClick={() => handleClass(classItem)}
+                disabled={createLoading}
+              >
+                {classItem}
+              </Button>
+            );
+          })}
         </div>
-      )}
+        {error.class && (
+          <div
+            className="error-message"
+            style={{ color: "red", margin: "10px 0" }}
+          >
+            ⚠️ {error.class}
+          </div>
+        )}
 
-      <div>
-        <p>Выберете ученика:</p>
-        <select
+        <Select
           value={formData.studentId}
           onChange={handleStudent}
           disabled={createLoading}
+          name="student.name"
         >
           <option value={0}>Выберете ученика</option>
           {students.map((student) => (
@@ -237,51 +263,61 @@ const CreateGradeForm = () => {
               {student.name} {student.surname}
             </option>
           ))}
-        </select>
-      </div>
+        </Select>
 
-      <select
-        value={formData.score}
-        name="score"
-        onChange={handleInputChange}
-        disabled={createLoading}
-      >
-        <option value={0}>Выберите оценку</option>
-        <option value={2}>2</option>
-        <option value={3}>3</option>
-        <option value={4}>4</option>
-        <option value={5}>5</option>
-      </select>
-
-      <div className="type">
-        <Input
-          type="text"
-          name="type"
-          value={formData.type}
-          placeholder="Введите тип оцениваемой работы..."
+        <Select
+          value={formData.score}
+          name="score"
           onChange={handleInputChange}
-          error={!!error.type}
-          required
           disabled={createLoading}
-        />
-      </div>
+          error={!!error.score}
+          selectSize="normal"
+        >
+          <option value={0}>Выберите оценку</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+          <option value={5}>5</option>
+        </Select>
 
-      <div className="comment">
-        <Input
-          type="text"
-          name="comment"
-          value={formData.comment}
-          placeholder="Оставьте комментарий..."
-          onChange={handleInputChange}
-          error={!!error.comment}
-          required
-          disabled={createLoading}
-        />
-      </div>
+        <div className="type">
+          <Input
+            type="text"
+            name="type"
+            value={formData.type}
+            placeholder="Контрольная работа, Устный ответ, Домашнее задание..."
+            onChange={handleInputChange}
+            error={!!error.type}
+            required
+            disabled={createLoading}
+          />
+          {error.type && (
+            <div
+              className="error-message"
+              style={{ color: "red", marginTop: "5px", fontSize: "14px" }}
+            >
+              ⚠️ {error.type}
+            </div>
+          )}
+        </div>
 
-      <Button type="submit" size="normal" disabled={createLoading}>
-        {createLoading ? "Создание оценки..." : "Поставить оценку"}
-      </Button>
+        <div className="comment">
+          <Input
+            type="text"
+            name="comment"
+            value={formData.comment}
+            placeholder="Оставьте комментарий..."
+            onChange={handleInputChange}
+            error={!!error.comment}
+            required
+            disabled={createLoading}
+          />
+        </div>
+
+        <Button type="submit" size="normal" disabled={createLoading}>
+          {createLoading ? "Создание оценки..." : "Поставить оценку"}
+        </Button>
+      </div>
     </form>
   );
 };

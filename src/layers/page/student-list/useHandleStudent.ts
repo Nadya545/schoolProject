@@ -1,3 +1,5 @@
+import { apiUser } from "../../../constants/apiConst";
+import { usersApi } from "../../../store/api/usersApi";
 import {
   Student,
   StudentCard,
@@ -8,7 +10,8 @@ import {
 export const handleStudents = (
   studentCards: StudentCard[],
   setStudentCards: React.Dispatch<React.SetStateAction<StudentCard[]>>,
-  createUserMutation?: any // 👈 ДОБАВЛЯЕМ параметр для RTK Query
+  createUserMutation?: any,
+  getNextStudentIdFn?: () => Promise<string>
 ) => {
   const createNewStudents = async (
     str1: string,
@@ -31,7 +34,14 @@ export const handleStudents = (
     const getIdStudent = async () => {
       try {
         console.log("🆔 Начало генерации ID...");
-        const response = await fetch("http://localhost:3001/users");
+        if (getNextStudentIdFn) {
+          console.log("🚀 Используем RTK Query для генерации ID");
+          const generatedId = await getNextStudentIdFn();
+          console.log("🎯 Сгенерированный ID через RTK:", generatedId);
+          return generatedId;
+        }
+        console.log("🔄 Используем старый метод fetch для генерации ID");
+        const response = await fetch(apiUser);
         console.log("📡 Получен ответ от /users, статус:", response.status);
 
         const allUsers = await response.json();
@@ -98,7 +108,7 @@ export const handleStudents = (
       } else {
         // 👇 Fallback на старый метод (для обратной совместимости)
         console.log("🔄 Используем старый метод fetch");
-        const response = await fetch("http://localhost:3001/users", {
+        const response = await fetch(apiUser, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

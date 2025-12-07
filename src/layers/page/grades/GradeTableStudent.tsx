@@ -24,7 +24,7 @@ const GradeTableStudent: React.FC<GradeTableStudentProps> = ({
   const gradesByDateAndSubject: {
     [subject: string]: { [date: string]: Score };
   } = {};
-  // Инициализируем объект для всех дат
+
   allSubject.forEach((sub) => {
     gradesByDateAndSubject[sub] = {};
   });

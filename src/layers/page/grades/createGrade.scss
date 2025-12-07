@@ -1,0 +1,30 @@
+.createForm {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  align-items: center;
+  .container-createForm {
+    width: 400px;
+    max-width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .class {
+      display: flex;
+      gap: 5px;
+    }
+    > *:not(.class):not(button) {
+      width: 100%;
+    }
+
+    // Но кнопки классов должны быть auto
+    .class {
+      width: auto;
+
+      button {
+        width: auto;
+      }
+    }
+  }
+}

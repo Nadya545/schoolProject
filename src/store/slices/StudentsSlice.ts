@@ -34,6 +34,7 @@ const studentsSlice = createSlice({
         name: string;
         surname: string;
         class: string;
+        id?: string;
         onStudentAdded?: (studentData: any) => void; // Колбэк для создания в БД
       }>
     ) => {

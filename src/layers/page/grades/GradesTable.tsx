@@ -32,27 +32,22 @@ const GradesTable: React.FC<GradesTableProps> = ({
     );
   }
 
-  // 🔥 УБИРАЕМ useMemo - ПРОСТЫЕ ВЫЧИСЛЕНИЯ
   const validGrades = grades.filter((grade) => grade.date && grade.studentId);
   const allDates = [...new Set(validGrades.map((grade) => grade.date!))].sort();
 
-  // 🔥 ПРОСТАЯ ГРУППИРОВКА БЕЗ МЕМОИЗАЦИИ
   const gradesByDateAndStudent: {
     [date: string]: { [studentId: string]: Score };
   } = {};
 
-  // Инициализируем объект для всех дат
   allDates.forEach((date) => {
     gradesByDateAndStudent[date] = {};
   });
 
-  // Заполняем оценки
   validGrades.forEach((grade) => {
     const studentId = String(grade.studentId!);
     gradesByDateAndStudent[grade.date!][studentId] = grade;
   });
 
-  // 🔥 ФОРМАТИРОВАНИЕ ДАТ БЕЗ useMemo
   const formattedDates = allDates.map((date) => {
     const dateObj = new Date(date);
     return {
@@ -62,7 +57,6 @@ const GradesTable: React.FC<GradesTableProps> = ({
     };
   });
 
-  // 🔥 ЗАЩИТА ОТ ПУСТЫХ ДАННЫХ
   if (!students || students.length === 0) {
     return (
       <div className="grades-table">

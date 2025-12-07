@@ -20,7 +20,7 @@ const ParentRegistr = () => {
   const [formData, setFormData] = useState({
     login: "",
     password: "",
-    children: [] as string[], // 👈 Изменяем на string[]
+    children: [] as string[],
   });
 
   const [error, setError] = useState({
@@ -30,7 +30,7 @@ const ParentRegistr = () => {
   });
 
   const studentCards = useAppSelector((state) => state.students.studentCards);
-  const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]); // 👈 Изменяем на string[]
+  const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   // 🔍 Проверяем уникальность логина при изменении
@@ -56,7 +56,6 @@ const ParentRegistr = () => {
       .includes(searchQuery.toLocaleLowerCase());
   });
 
-  // 👇 Исправляем тип параметра на string
   const handleStudentCheckBox = (studentId: string) => {
     const isSelected = selectedStudentIds.includes(studentId);
     if (isSelected) {
@@ -128,12 +127,12 @@ const ParentRegistr = () => {
         login: formData.login,
         password: formData.password,
         role: "parent" as const,
-        children: selectedStudentIds.map((id) => parseInt(id)), // 👈 Конвертируем string[] в number[]
+        children: selectedStudentIds.map((id) => parseInt(id)),
       };
 
       console.log("📝 Создаем родителя:", newParent);
 
-      // 🎯 СОЗДАЕМ РОДИТЕЛЯ В БАЗЕ ДАННЫХ через RTK Query
+      //СОЗДАЮ РОДИТЕЛЯ В БАЗЕ ДАННЫХ через RTK Query
       await createUser(newParent).unwrap();
       console.log("✅ Родитель создан в базе");
 
@@ -151,7 +150,7 @@ const ParentRegistr = () => {
     <div className="parent-reg-container">
       <h1 className="parent-reg-title">Регистрация родителя</h1>
 
-      {/* Показываем ошибки RTK Query */}
+      {/* Показываю ошибки RTK Query */}
       {createError && (
         <div className="error-message global-error">
           ❌ Ошибка при создании пользователя
@@ -200,7 +199,7 @@ const ParentRegistr = () => {
                 <input
                   type="checkbox"
                   checked={selectedStudentIds.includes(student.id)}
-                  onChange={() => handleStudentCheckBox(student.id)} // 👈 student.id уже string
+                  onChange={() => handleStudentCheckBox(student.id)}
                   disabled={createLoading}
                 />
                 <span className="check-children">

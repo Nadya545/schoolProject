@@ -102,6 +102,25 @@ const TeacherRegistr = () => {
     if (!formData.name.trim()) {
       newError.name = "Введите ФИО!";
       isValid = false;
+    } else {
+      // Убираем лишние пробелы и разделяем по пробелам
+      const words = formData.name.trim().replace(/\s+/g, " ").split(" ");
+
+      if (words.length !== 3) {
+        newError.name =
+          "ФИО должно содержать ровно 3 слова: Фамилия Имя Отчество";
+        isValid = false;
+      } else {
+        // Дополнительная проверка, что каждое слово содержит только буквы
+        const russianLettersRegex = /^[А-ЯЁа-яё\-]+$/;
+        for (let i = 0; i < words.length; i++) {
+          if (!russianLettersRegex.test(words[i])) {
+            newError.name = `Слово "${words[i]}" содержит недопустимые символы. Можно использовать только русские буквы и дефис`;
+            isValid = false;
+            break;
+          }
+        }
+      }
     }
     if (!formData.subject) {
       newError.subject = "Выберете предмет!";

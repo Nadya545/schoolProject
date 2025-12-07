@@ -10,6 +10,8 @@ import GradesTable from "./GradesTable";
 import "./grades.scss";
 import { Student } from "../../../types/studentType";
 import GradeTableStudent from "./GradeTableStudent";
+import { getFilteredGrades } from "./getFilteredGrades";
+import { getStudentsOfSelectedClass } from "./getStudentsOfSelectedClass";
 
 const GradesList = () => {
   // 🔥 ХУКИ (порядок стабильный)
@@ -70,51 +72,19 @@ const GradesList = () => {
     );
   }
 
-  //Кого показывать, каких именно студентов?
-  let studentsOfSelectedClass: Student[] = [];
-  if (!selectedClass) {
-    // Все студенты всех классов
-    studentsOfSelectedClass = studentCardsRedux.flatMap(
-      (card) => card.students || []
-    );
-  } else {
-    // Студенты выбранного класса
-    const card = studentCardsRedux.find(
-      (card) => `${card.number}${card.letter}` === selectedClass
-    );
-    studentsOfSelectedClass = card?.students || [];
-  }
+  const studentsOfSelectedClass = getStudentsOfSelectedClass(
+    selectedClass,
+    studentCardsRedux
+  );
 
   // Какие оценки показывать
-  let filteredGrades: Score[] = [];
-
-  if (currentUser.role === "student") {
-    // Оценки текущего студента
-    filteredGrades = allScores.filter(
-      (score) => score.studentId?.toString() === currentUser.id?.toString()
-    );
-  } else if (currentUser.role === "parent") {
-    // Оценки детей родителя
-    const childrenIds = (currentUser.children || []).map(String);
-    filteredGrades = allScores.filter((score) =>
-      childrenIds.includes(score.studentId?.toString() || "")
-    );
-  } else if (currentUser.role === "teacher") {
-    // Оценки по предмету учителя для выбранных студентов
-    const studentIds = studentsOfSelectedClass.map((student) =>
-      student.id.toString()
-    );
-    filteredGrades = allScores.filter(
-      (score) =>
-        score.subject === currentUser.subject &&
-        studentIds.includes(score.studentId?.toString() || "")
-    );
-  }
+  const filteredGrades = getFilteredGrades(
+    currentUser,
+    allScores,
+    studentsOfSelectedClass
+  );
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    localStorage.removeItem("selectedClass"); // 🔥 ОЧИЩАЕМ ПРИ ВЫХОДЕ
     navigate("/");
   };
   const handleClassChange = (newClass: string) => {
@@ -137,7 +107,7 @@ const GradesList = () => {
           className="btn-class-list"
           onClick={handleLogout}
         >
-          Выход
+          На главную
         </Button>
 
         <h1 className="gradeList-title">Журнал оценок</h1>

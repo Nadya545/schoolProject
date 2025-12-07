@@ -40,7 +40,6 @@ const GradeTableRow: React.FC<GradeTableRowProps> = ({
     }
   };
 
-  // 🎯 ОБНОВЛЕНИЕ ОЦЕНКИ ЧЕРЕЗ RTK Query
   const updateScoreHandler = async (updateData: Partial<Score>) => {
     try {
       await updateScoreMutation({
@@ -48,7 +47,7 @@ const GradeTableRow: React.FC<GradeTableRowProps> = ({
         updatedData: updateData,
       }).unwrap();
       console.log("✅ Оценка обновлена через RTK Query");
-      reLoadGrades(); // Обновляем список оценок
+      reLoadGrades();
       setShowModal(false);
     } catch (error) {
       console.error("❌ Ошибка обновления оценки:", error);

@@ -25,7 +25,6 @@ const GradeItem: React.FC<GradeItemProps> = ({
 }) => {
   const studentCards = useAppSelector((state) => state.students.studentCards);
 
-  // 🎯 Используем RTK Query мутации для удаления и обновления оценок
   const [deleteScore, { isLoading: deleteLoading }] = useDeleteScoreMutation();
   const [updateScoreMutation, { isLoading: updateLoading }] =
     useUpdateScoreMutation();
@@ -75,7 +74,6 @@ const GradeItem: React.FC<GradeItemProps> = ({
   console.log("🔍 ALL STUDENTS:", allStudents);
   console.log("🔍 SEARCHING FOR STUDENT ID:", grade.studentId);
 
-  // Отладочная информация
   console.log("📊 GradeItem debug:", {
     studentCards,
     student,
@@ -98,7 +96,6 @@ const GradeItem: React.FC<GradeItemProps> = ({
     return `Ребенок ID: ${grade.studentId}`;
   };
 
-  // 🎯 УДАЛЕНИЕ ОЦЕНКИ ЧЕРЕЗ RTK Query
   const deleteScoreHandler = async () => {
     const isConfirmed = window.confirm(
       "Вы уверены, что хотите удалить эту оценку?"
@@ -115,7 +112,6 @@ const GradeItem: React.FC<GradeItemProps> = ({
     }
   };
 
-  // 🎯 ОБНОВЛЕНИЕ ОЦЕНКИ ЧЕРЕЗ RTK Query
   const updateScoreHandler = async (updateData: Partial<Score>) => {
     try {
       await updateScoreMutation({
@@ -138,7 +134,14 @@ const GradeItem: React.FC<GradeItemProps> = ({
 
       {role === "teacher" && (
         <>
-          <CorrectScoreModal updateScore={updateScoreHandler} grade={grade} />
+          <CorrectScoreModal
+            updateScoreHandler={updateScoreHandler}
+            grade={grade}
+            isOpen={false}
+            onClose={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
           <Button
             size="normal"
             onClick={deleteScoreHandler}

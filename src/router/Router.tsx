@@ -3,7 +3,7 @@ import React from "react";
 import App from "../App";
 import RouterErrorElement from "./RouterErrorElement";
 
-import Welcome from "../layers/page/mainPage/Welcome";
+import Welcome from "../layers/page/main-page/Welcome";
 import StudentsList from "../layers/page/student-list/studentsList/StudentsList";
 import Authorisation from "../layers/page/auth/Authorisation";
 import Registration from "../layers/page/registration/Registration";

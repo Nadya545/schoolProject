@@ -75,6 +75,23 @@ export const usersApi = createApi({
       query: (id) => `users/${id}`,
     }),
 
+    getNextStudentId: builder.mutation<string, void>({
+      query: () => "users",
+      transformResponse: (response: User[]) => {
+        const students = response.filter((user) => user.role === "student");
+
+        const numericIds = students
+          .map((student) => {
+            const match = student.id.match(/(\d+)$/);
+            return match ? parseInt(match[1]) : 0;
+          })
+          .filter((id) => id > 0);
+
+        const nextId = numericIds.length > 0 ? Math.max(...numericIds) + 1 : 16;
+        return `student${nextId}`;
+      },
+    }),
+
     createUser: builder.mutation<User, Omit<User, "id">>({
       query: (user) => ({
         url: "users",
@@ -111,4 +128,5 @@ export const {
   useCreateUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useGetNextStudentIdMutation,
 } = usersApi;

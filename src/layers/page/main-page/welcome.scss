@@ -1,7 +1,7 @@
 .home {
   display: flex;
   align-items: center;
-  justify-content: center;
+
   flex-direction: column;
   width: 100%;
   height: 100vh;
@@ -11,13 +11,20 @@
   color: rgb(33, 33, 119);
   background-image: url(https://i.pinimg.com/736x/40/5e/c1/405ec13d579af33ed54239055e909764.jpg);
   background-size: cover;
-
+  .btn-class-list {
+    align-self: flex-start; // Выравниваем по левому краю
+    margin: 20px;
+  }
   &-p {
     font-size: 22px;
   }
-  .opportunities {
+  .opportunitiesAuth,
+  .opportunitiesGuest {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+    text-align: center;
     nav {
       display: flex;
       flex-direction: column;

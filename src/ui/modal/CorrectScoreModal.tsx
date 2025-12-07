@@ -4,6 +4,7 @@ import Button from "../button/Button";
 import Modal from "./Modal";
 import { Score } from "../../store/api/scoresApi";
 import Input from "../input/Input";
+import Select from "../selects/Select";
 
 interface CorrectScoreModalProps {
   updateScoreHandler: (updateData: Partial<Score>) => void;
@@ -58,7 +59,7 @@ const CorrectScoreModal: React.FC<CorrectScoreModalProps> = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="modal-body">
         <form className="inputForm" onSubmit={handleFormSubmit}>
-          <select
+          <Select
             value={formData.score}
             onChange={(e) =>
               setFormData((prev) => ({
@@ -71,7 +72,7 @@ const CorrectScoreModal: React.FC<CorrectScoreModalProps> = ({
             <option value={3}>3</option>
             <option value={4}>4</option>
             <option value={5}>5</option>
-          </select>
+          </Select>
           <div className="type">
             <Input
               type="text"

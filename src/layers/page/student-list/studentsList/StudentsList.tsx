@@ -4,11 +4,7 @@ import "../../../../App.scss";
 import CardsContainer from "./CardsContainer";
 import { handleStudents } from "../useHandleStudent";
 import { useNavigate } from "react-router-dom";
-import {
-  StudentCard,
-  SelectedStudent,
-  Student,
-} from "../../../../types/studentType";
+import { StudentCard } from "../../../../types/studentType";
 import { Group } from "../../../../types/studentType";
 import { useAppSelector } from "../../../../store/hooks";
 import {
@@ -35,8 +31,6 @@ function StudentsList() {
     useCreateUserMutation();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
     navigate("/");
   };
 
