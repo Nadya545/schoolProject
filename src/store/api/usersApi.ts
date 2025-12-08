@@ -9,7 +9,7 @@ export interface User {
   role: "teacher" | "parent" | "student";
   subject?: string;
   classes?: string[];
-  children?: number[];
+  children?: string[];
   class?: string;
 }
 
@@ -40,7 +40,9 @@ export const usersApi = createApi({
         if (user) {
           return {
             ...user,
-            children: user.children ? user.children.map(Number) : undefined,
+            children: user.children
+              ? user.children.map((child) => String(child))
+              : undefined,
           };
         }
         throw new Error("Пользователь не найден");
@@ -64,7 +66,9 @@ export const usersApi = createApi({
         if (user) {
           return {
             ...user,
-            children: user.children ? user.children.map(Number) : undefined,
+            children: user.children
+              ? user.children.map((child) => String(child))
+              : undefined,
           };
         }
         return null;

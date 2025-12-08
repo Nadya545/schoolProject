@@ -1,6 +1,6 @@
 import React from "react";
 import { Score } from "../../../store/api/scoresApi";
-import GradeTableRow from "./GradeTableRow";
+import GradeTableRow from "./GradeTableRowTeacher";
 import { Student } from "../../../types/studentType";
 
 interface GradesTableProps {

@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useGetUser } from "../../../hooks/useGetUser";
 import { useNavigate } from "react-router-dom";
 import Button from "../../../ui/button/Button";
 import { useAppSelector } from "../../../store/hooks";
 import { useStudentsSync } from "../../page/student-list/useStudentsSync";
 import { useGetScoresQuery } from "../../../store/api/scoresApi";
-import { Score } from "../../../store/api/scoresApi";
-import GradesTable from "./GradesTable";
+import GradesTable from "./GradesTableTeacher";
 import "./grades.scss";
-import { Student } from "../../../types/studentType";
-import GradeTableStudent from "./GradeTableStudent";
+import GradeTableStudent from "./GradesTableStudent";
 import { getFilteredGrades } from "./getFilteredGrades";
 import { getStudentsOfSelectedClass } from "./getStudentsOfSelectedClass";
+import GradesTableParent from "./GradesTableParent";
+import { Student } from "../../../types/studentType";
 
 const GradesList = () => {
-  // 🔥 ХУКИ (порядок стабильный)
+  // 🔥 ХУКИ (порядок стабильный) - ВСЕ ХУКИ В НАЧАЛЕ!
   const navigate = useNavigate();
   const { getCurrentUser } = useGetUser();
   const currentUser = getCurrentUser();
@@ -28,6 +28,9 @@ const GradesList = () => {
   // 🔥 СОХРАНЯЕМ ВЫБРАННЫЙ КЛАСС В localStorage
   const [selectedClass, setSelectedClass] = useState(() => {
     return localStorage.getItem("selectedClass") || "";
+  });
+  const [selectedChild, setSelectedChild] = useState(() => {
+    return localStorage.getItem("selectedChild") || "";
   });
 
   // 🔥 СОХРАНЯЕМ КЛАСС ПРИ ИЗМЕНЕНИИ
@@ -44,13 +47,70 @@ const GradesList = () => {
     refetch: refetchScores,
   } = useGetScoresQuery();
 
-  // 🔥 ОБНОВЛЯЕМ ДАННЫЕ БЕЗ СБРОСА СОСТОЯНИЯ
-  const handleReloadGrades = () => {
-    refetchScores();
-    // selectedClass НЕ СБРАСЫВАЕТСЯ!
+  // 🔧 Функция нормализации ID - всегда к строке
+  const normalizeId = (id: any): string => {
+    if (id === null || id === undefined) return "";
+    return String(id).trim();
   };
 
-  // 🔥 УСЛОВНЫЕ ВОЗВРАТЫ
+  // 🔥 ВЫЧИСЛЕНИЯ ДО УСЛОВНЫХ RETURN - useMemo тоже хук!
+  const allStudents = useMemo(() => {
+    if (!studentCardsRedux || studentCardsRedux.length === 0) return [];
+    return studentCardsRedux.flatMap((card) =>
+      card.students.map((student) => ({
+        ...student,
+        class: `${card.number}${card.letter}`,
+      }))
+    );
+  }, [studentCardsRedux]);
+
+  // Находим детей по ID с нормализацией
+  const childrenObjects = useMemo(() => {
+    if (!currentUser?.children || !allStudents.length) return [];
+    return currentUser.children
+      .map((childId: any) => {
+        const normalizedChildId = normalizeId(childId);
+        const child = allStudents.find(
+          (student) => normalizeId(student.id) === normalizedChildId
+        );
+        return child || null;
+      })
+      .filter(Boolean);
+  }, [currentUser?.children, allStudents]);
+
+  // Вычисления для студентов выбранного класса
+  const studentsOfSelectedClass = useMemo(() => {
+    if (!selectedClass || !studentCardsRedux) return [];
+    return getStudentsOfSelectedClass(selectedClass, studentCardsRedux);
+  }, [selectedClass, studentCardsRedux]);
+
+  // Какие оценки показывать (основной фильтр)
+  const filteredGrades = useMemo(() => {
+    if (!currentUser || !allScores || allScores.length === 0) return [];
+    return getFilteredGrades(currentUser, allScores, studentsOfSelectedClass);
+  }, [currentUser, allScores, studentsOfSelectedClass]);
+
+  // Фильтруем оценки в зависимости от выбранного ребенка
+  const gradesToDisplay = useMemo(() => {
+    if (!currentUser || currentUser.role !== "parent") return filteredGrades;
+
+    if (selectedChild) {
+      // Фильтруем только оценки выбранного ребенка
+      const childGrades = filteredGrades.filter(
+        (score) => normalizeId(score.studentId) === normalizeId(selectedChild)
+      );
+      console.log(
+        `📊 Оценки для ребенка ${selectedChild}:`,
+        childGrades.length
+      );
+      return childGrades;
+    }
+
+    console.log("📊 Показываем оценки всех детей:", filteredGrades.length);
+    return filteredGrades;
+  }, [filteredGrades, selectedChild, currentUser]);
+
+  // 🔥 ТЕПЕРЬ УСЛОВНЫЕ ВОЗВРАТЫ
   if (!currentUser) {
     return <div className="gradeList">Пожалуйста войдите в систему!</div>;
   }
@@ -72,32 +132,45 @@ const GradesList = () => {
     );
   }
 
-  const studentsOfSelectedClass = getStudentsOfSelectedClass(
-    selectedClass,
-    studentCardsRedux
-  );
-
-  // Какие оценки показывать
-  const filteredGrades = getFilteredGrades(
-    currentUser,
-    allScores,
-    studentsOfSelectedClass
-  );
-
+  // 🔥 ОБРАБОТЧИКИ СОБЫТИЙ
   const handleLogout = () => {
     navigate("/");
   };
+
+  const handleReloadGrades = () => {
+    refetchScores();
+  };
+
   const handleClassChange = (newClass: string) => {
     setSelectedClass(newClass);
     if (newClass === "") {
-      localStorage.removeItem("selectedClass"); // 🔥 ОЧИЩАЕМ ЕСЛИ ВЫБРАЛИ "Все классы"
+      localStorage.removeItem("selectedClass");
     }
   };
+
+  const handleChildChange = (child: string) => {
+    console.log("🎯 handleChildChange вызван с:", child);
+    setSelectedChild(child);
+    if (child) {
+      localStorage.setItem("selectedChild", child);
+    } else {
+      localStorage.removeItem("selectedChild");
+    }
+  };
+
+  // 🔥 ВЫЧИСЛЕНИЯ ДЛЯ РЕНДЕРА
   const isLoading = studentsLoading || scoresLoading;
   const hasError = studentsError || scoresError;
-
-  // 🔥 ДОБАВЛЯЕМ КНОПКУ ДЛЯ УЧИТЕЛЯ
   const showCreateGradeButton = currentUser.role === "teacher" && selectedClass;
+
+  // 🔥 ОТЛАДОЧНАЯ ИНФОРМАЦИЯ
+  console.log("=== DEBUG РОДИТЕЛЬ ===");
+  console.log("Родитель ID:", currentUser.id);
+  console.log("Дети (ID):", currentUser.children);
+  console.log("Все студенты:", allStudents.length);
+  console.log("Найденные дети:", childrenObjects);
+  console.log("🎯 Оценок для отображения:", gradesToDisplay.length);
+  console.log("👶 Выбранный ребенок:", selectedChild);
 
   return (
     <div className="gradeList">
@@ -142,6 +215,23 @@ const GradesList = () => {
             )}
           </div>
         )}
+        {currentUser.role === "parent" && (
+          <div className="class-selector">
+            <label>Выберите своего ребенка: </label>
+
+            <select
+              value={selectedChild}
+              onChange={(e) => handleChildChange(e.target.value)}
+            >
+              <option value="">Все дети</option>
+              {childrenObjects?.map((child: Student) => (
+                <option key={child.id} value={child.id.toString()}>
+                  {child.name} {child.surname}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       {hasError && <div className="error">❌ Ошибка загрузки данных</div>}
@@ -178,15 +268,10 @@ const GradesList = () => {
                 />
               )}
               {currentUser.role === "parent" && (
-                <GradesTable
-                  loadGrades={handleReloadGrades}
-                  grades={filteredGrades}
-                  role={currentUser.role}
-                  children={currentUser.children}
-                  reLoadGrades={handleReloadGrades}
-                  subject={currentUser.subject || ""}
-                  students={studentsOfSelectedClass}
-                  selectedClass={selectedClass}
+                <GradesTableParent
+                  parentData={currentUser}
+                  childGrades={gradesToDisplay}
+                  selectedChild={selectedChild}
                 />
               )}
             </>

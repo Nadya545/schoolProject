@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useModal } from "../../hooks/useModal";
 import Button from "../button/Button";
 import Modal from "./Modal";
 import { Score } from "../../store/api/scoresApi";

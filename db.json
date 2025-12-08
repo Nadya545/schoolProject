@@ -418,6 +418,16 @@
       "password": "12345",
       "class": "7Б",
       "role": "student"
+    },
+    {
+      "id": "6733",
+      "login": "Родитель Тест",
+      "password": "12345",
+      "role": "parent",
+      "children": [
+        11,
+        15
+      ]
     }
   ],
   "scores": [
@@ -801,6 +811,17 @@
       "score": 3,
       "type": "урок",
       "comment": "хорошо"
+    },
+    {
+      "id": "8e07",
+      "class": "10Б",
+      "studentId": "11",
+      "teacherId": "1c4f",
+      "subject": "История",
+      "score": "5",
+      "type": "контрольная",
+      "comment": "отлично",
+      "date": "2025-12-08"
     }
   ]
 }

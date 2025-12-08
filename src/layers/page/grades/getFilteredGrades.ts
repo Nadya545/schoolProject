@@ -11,26 +11,37 @@ export const getFilteredGrades = (
     return [];
   }
   let filteredGrades: Score[] = [];
+
+  const normalizeId = (id: any): string => {
+    if (id === null || id === undefined) return "";
+    return String(id);
+  };
+
   if (currentUser.role === "student") {
     // Оценки текущего студента
+    const currentUserId = normalizeId(currentUser.id);
     filteredGrades = allScores.filter(
-      (score) => score.studentId?.toString() === currentUser.id?.toString()
+      (score) => normalizeId(score.studentId) === currentUserId
     );
   } else if (currentUser.role === "parent") {
     // Оценки детей родителя
-    const childrenIds = (currentUser.children || []).map(String);
+    const childrenIds = (currentUser.children || []).map((childId) =>
+      normalizeId(childId)
+    );
+
     filteredGrades = allScores.filter((score) =>
-      childrenIds.includes(score.studentId?.toString() || "")
+      childrenIds.includes(normalizeId(score.studentId))
     );
   } else if (currentUser.role === "teacher") {
     // Оценки по предмету учителя для выбранных студентов
     const studentIds = studentsOfSelectedClass.map((student) =>
-      student.id.toString()
+      normalizeId(student.id)
     );
+
     filteredGrades = allScores.filter(
       (score) =>
         score.subject === currentUser.subject &&
-        studentIds.includes(score.studentId?.toString() || "")
+        studentIds.includes(normalizeId(score.studentId))
     );
   }
   return filteredGrades;
